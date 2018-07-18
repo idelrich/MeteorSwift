@@ -5,9 +5,9 @@ MeteorSwift is a swift (and swifty) re-implementaion of [Objective-DDP](https://
 ## Installation 
 Install via CocoaPods:
 
-`
-pod 'MeteorSwift'
-`
+    
+    pod 'MeteorSwift'
+    
 
 MeteorSwift provides a small number of key classes and a number of typealiases to make everything make sense. Here is an overview
 
@@ -19,33 +19,32 @@ This class provides the client side implementation for a Meteor implementation. 
 
 Create a MeteorClient instance by passing the url to your site and optionally the version of DDP (defaults to 1) to use, then call connect to connect to the server.
 
-`
+
     let myClient = MeteorClient('wss://app.mysecuresite.com/websocket')
     myClient.connect()
-`
+
 
 The MeteorClient uses notifications to broadcase changes in the connection, specifically
 
-`    
+    
     MeteorClientDidConnect
     MeteorClientConnectionReady
     MeteorClientDidDisconnect
-`
+
 messages. You should register with NotificationCenter before calling connect in order to be informed of these events.
 
 ### Subscriptions
 
 Once connected, you can manage subscriptions with:
 
-`
+    
     let subId = myClient.add(subscription: "name_of_subscription", withParams: [Any])
-`
-
+    
 to stop a subscription (unsubscribe) call
 
-`
+    
     myClient.remove(subscriptionId: subId)
-`
+    
 
 ### Login & SignUp
 
@@ -61,39 +60,38 @@ MeteorSwift defines the CollectionDecoder protocol which requires that an object
 
 For example, with a simple object in a theorietical messaging app,
 
-`
-struct Message : Codable, CollectionDecoder {
-    let _id     : String
-    let body    : String
-    let time    : EJSONDate
-}
-`
+
+    struct Message : Codable, CollectionDecoder {
+        let _id     : String
+        let body    : String
+        let time    : EJSONDate
+    }
+
 
 *Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type (described below).*
 
 conforming to CollectionDecoder is as follows:
 
-`
-extension Message: CollectionDecoder { 
-   static let decode: MeteorDecoder = {
-       return try $1.decode(Message.self, from: $0)
-   }
-   static let encode: MeteorEncoder = {
-       if let message = $0 as? Message {
-           return try $1.encode(message)
-       }
-       return nil
-   }
-}
-`
+
+    extension Message: CollectionDecoder { 
+        static let decode: MeteorDecoder = {
+            return try $1.decode(Message.self, from: $0)
+        }
+        
+        static let encode: MeteorEncoder = {
+            if let message = $0 as? Message {
+                return try $1.encode(message)
+            }
+            return nil
+        }
+    }
+
 
 You can inform the MeteorClient that a particular collection supports encodign and decoding to a specific type by registering the CollectionDecoder for that collection and type as follows:
 
-`
     myClient.registerCodable("collection_name", collectionCoder: MyCollectionType.Type)
-`
-However, this is done automatically when you create a MongoCollection object (see below). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
 
+However, this is done automatically when you create a MongoCollection object (see below). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
 
 ## EJSON
 
@@ -115,9 +113,8 @@ MongoCollections employ generics to infer the expected type of the object in the
 
 You create a Mongo collection collection by providing the instance of Meteor it is going to connect to, and the name of the collection as follows:
 
-`
     messages    = MongoCollection<Message>(meteor: meteor, collection: "MessageCollection")
-`
+
 
 ### find and findOne
 
