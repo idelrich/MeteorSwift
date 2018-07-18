@@ -176,13 +176,34 @@ public class MeteorClient: NSObject {
         }
         return nil
     }
-    /// Provides low level insert support for a collection
+    /// Provides low level update support for a collection, fields
+    /// set to NSNull will be cleared from the object, all other
+    /// fields will be set.
+    ///
+    /// - Parameters:
+    ///   - collectionName: The name of the collection to insert a record into.
+    ///   - objectWithId: The objectId to remove.
+    ///   - changes: An EJSON object with the required changes
+    ///   - responseCallback: Optional callback with results of the remove.
+    public func update(into collectionName: String, objectWithId _id:String, changes: EJSONObject, responseCallback: MeteorClientMethodCallback? = nil) {
+
+        let cleared = changes.filter({ $1 is NSNull }).map{ $0.0 }
+        var modifiers:EJSONObject =
+            ["$set": changes.filter { cleared.contains($0.0) }
+        ]
+        if cleared.count > 0 {
+            modifiers["$unset"] = Dictionary.init(uniqueKeysWithValues: cleared.map { ($0, "") })
+        }
+        call(method: "/\(collectionName)/update", parameters: [["_id", _id], modifiers], responseCallback: responseCallback)
+    }
+    /// Provides low level remove support for a collection
     ///
     /// - Parameters:
     ///   - collectionName: The name of the collection to insert a record into.
     ///   - objectWithId: The objectId to remove.
     ///   - responseCallback: Optional callback with results of the remove.
     public func remove(from collectionName: String, objectWithId _id: String, responseCallback: MeteorClientMethodCallback?) {
+        
         call(method: "/\(collectionName)/remove", parameters: [["_id", _id]], responseCallback: responseCallback)
     }
     /// Sends a method to the Meteor server with an option to post a notification

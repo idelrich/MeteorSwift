@@ -12,6 +12,9 @@ public struct EJSONDate: Codable {
     enum CodingKeys : String, CodingKey { case _elapsed = "$date" }
     private let _elapsed: Int
     
+    public init(date: Date) {
+        _elapsed = Int(date.timeIntervalSince1970*1000)
+    }
     public var date:Date { return Date(timeIntervalSince1970: ms) }
     public var ms:TimeInterval { return TimeInterval(_elapsed)/1000 }
 }

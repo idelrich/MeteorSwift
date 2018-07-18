@@ -50,8 +50,40 @@ public struct MongoCollection<T> {
         self.meteor = meteor
         self.name = collection
         watcher = MeteorWatcher(meteor: meteor, collection: collection)
+        
+        if let coder = T.self as? CollectionDecoder.Type {
+            print("Register Codable for \(name)")
+            meteor.registerCodable(collection, collectionCoder: coder)
+        }
     }
 
+    /// Insert an object into this collection
+    ///
+    /// - Parameters:
+    ///   - object: Object to insert
+    ///   - responseCallback: (Optional) callback to be called once server completes this response
+    /// - Returns: _id iof newly inserted object (or nil)
+    public func insert(_ object: T, responseCallback: MeteorClientMethodCallback? = nil) -> String? {
+        return meteor.insert(into: name, object: object, responseCallback: responseCallback)
+    }
+    /// Update an object in the collection
+    ///
+    /// - Parameters:
+    ///   - objectWithId: _id if the object being updated
+    ///   - changes: EJSONObj containing the required updates. Fields marked with NSNull are
+    ///              $unset, while other fields are $set.
+    ///   - responseCallback: (Optional) callback to be called once server completes this response
+    public func update(objectWithId _id: String, changes: EJSONObject, responseCallback: MeteorClientMethodCallback? = nil) {
+        meteor.update(into: name, objectWithId: _id, changes: changes, responseCallback: responseCallback)
+    }
+    /// Remove an object with the specified id from this collection
+    ///
+    /// - Parameters:
+    ///   - _id: id of object to remove from theis collection
+    ///   - responseCallback: (Optional) callback to be called once server completes this response
+    public func remove(_ _id: String, responseCallback: MeteorClientMethodCallback? = nil) {
+        meteor.remove(from: name, objectWithId: _id, responseCallback: responseCallback)
+    }
     /// Find all records that pass the provided "matching" closure, sorted by
     /// the provided (optional) sorting closure
     ///
