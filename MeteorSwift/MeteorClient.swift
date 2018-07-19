@@ -54,10 +54,6 @@ public typealias EJSONObjArray              = [EJSONObject]
 public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
 /// Subscription callback, called when a subscription is ready
 public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
-/// Codable decoder method (see CollectionDecoder)
-public typealias MeteorDecoder              = (Data, JSONDecoder) throws ->  Any?
-/// Codable encoder method (see CollectionDecoder)
-public typealias MeteorEncoder              = (Any, JSONEncoder) throws -> Data?
 
 /// CollectionDecoder
 ///
@@ -66,8 +62,8 @@ public typealias MeteorEncoder              = (Any, JSONEncoder) throws -> Data?
 /// EJSON objects into structures or classes. If provided the collections
 /// managed by Meteor will contain concrete types rather than JSONObjects.
 public protocol CollectionDecoder {
-    static var decode: MeteorDecoder { get }
-    static var encode: MeteorEncoder { get }
+    static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
+    static func encode(value: Any, encoder: JSONEncoder) throws -> Data?
 }
 
 /// Convenience type, a Meteor Collection is an ordered
@@ -463,7 +459,7 @@ public class MeteorClient: NSObject {
     func convertToEJSON(collection name:String, object: Any) -> EJSONObject? {
         if let collectionCoder = codables[name] {
             do {
-                if let data = try collectionCoder.encode(object, jsonEncoder) {
+                if let data = try collectionCoder.encode(value: object, encoder: jsonEncoder) {
                     //
                     // Merge changes into the original object.
                     let encoded = try JSONSerialization.jsonObject(with: data, options: [])

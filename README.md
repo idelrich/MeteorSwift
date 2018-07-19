@@ -2,6 +2,8 @@
 
 MeteorSwift is a swift (and swifty) re-implementaion of [Objective-DDP](https://github.com/boundsj/ObjectiveDDP), that also takes advantage of Swift closures, codable types and some other Swift magic.
 
+This document current to version 0.0.2
+
 ## Installation 
 Install via CocoaPods:
 
@@ -244,12 +246,9 @@ MeteorSwift defines a number of helper types and protocols that are summarized b
     public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
     public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
 
-    public typealias MeteorDecoder              = (Data, JSONDecoder) throws ->  Any?
-    public typealias MeteorEncoder              = (Any, JSONEncoder) throws -> Data?
-    
     public protocol CollectionDecoder {
-        static var decode: MeteorDecoder { get }
-        static var encode: MeteorEncoder { get }
+        static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
+        static func encode(value: Any, encoder: JSONEncoder) throws -> Data?
     }
 
 ### MongoCollection Types

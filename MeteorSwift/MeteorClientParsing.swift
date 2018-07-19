@@ -107,7 +107,7 @@ extension MeteorClient { // Parsing
             do {
                 let data = try JSONSerialization.data(withJSONObject: value, options: [])
                 
-                if let result = try collectionCoder.decode(data, jsonDecoder) {
+                if let result = try collectionCoder.decode(data: data, decoder: jsonDecoder) {
                     collection.add(result, for: _id)
                     collections[collectionName] = collection
                     return (_id, result)
@@ -136,7 +136,7 @@ extension MeteorClient { // Parsing
             // This collection is codable, convert it.
             do {
                 let data = try JSONSerialization.data(withJSONObject: value, options: [])
-                if let result = try collectionCoder.decode(data, jsonDecoder) {
+                if let result = try collectionCoder.decode(data: data, decoder: jsonDecoder) {
                     if let documentId = beforeId {
                         if let documentIndex = collection.index(ofKey: documentId) {
                             collection.insert(value, for: _id, at: documentIndex)
@@ -175,7 +175,7 @@ extension MeteorClient { // Parsing
             //
             // This collection is codable, convert it.
             do {
-                if let data = try collectionCoder.encode(collection[_id]!, jsonEncoder) {
+                if let data = try collectionCoder.encode(value: collection[_id]!, encoder: jsonEncoder) {
                     //
                     // Merge changes into the original object.
                     let json = try? JSONSerialization.jsonObject(with: data, options: [])
@@ -198,7 +198,7 @@ extension MeteorClient { // Parsing
                         // And now decode it back to the original obkect type
                         do {
                             if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
-                                if let result = try collectionCoder.decode(data, jsonDecoder) {
+                                if let result = try collectionCoder.decode(data: data, decoder: jsonDecoder) {
                                     collection[_id] = result
                                     collections[collectionName] = collection
                                     return (_id, result)
