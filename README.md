@@ -7,9 +7,9 @@ This document current to version 0.0.2
 ## Installation 
 Install via CocoaPods:
 
-    
-    pod 'MeteorSwift'
-    
+```ruby    
+pod 'MeteorSwift'
+```
 
 MeteorSwift provides a small number of key classes and a number of typealiases to make everything make sense. Here is an overview
 
@@ -21,17 +21,18 @@ This class provides the client side implementation for a Meteor implementation. 
 
 Create a MeteorClient instance by passing the url to your site and optionally the version of DDP (defaults to 1) to use, then call connect to connect to the server.
 
-
-    let myClient = MeteorClient('wss://app.mysecuresite.com/websocket')
-    myClient.connect()
-
+```swift
+let myClient = MeteorClient('wss://app.mysecuresite.com/websocket')
+myClient.connect()
+```
 
 The MeteorClient uses notifications to broadcase changes in the connection, specifically
 
-    
-    MeteorClientDidConnect
-    MeteorClientConnectionReady
-    MeteorClientDidDisconnect
+```swift    
+MeteorClientDidConnect
+MeteorClientConnectionReady
+MeteorClientDidDisconnect
+```
 
 messages. You should register with NotificationCenter before calling connect in order to be informed of these events.
 
@@ -39,14 +40,15 @@ messages. You should register with NotificationCenter before calling connect in 
 
 Once connected, you can manage subscriptions with:
 
-    
-    let subId = myClient.add(subscription: "name_of_subscription", withParams: [Any])
-    
+```swift    
+let subId = myClient.add(subscription: "name_of_subscription", withParams: [Any])
+```
+
 to stop a subscription (unsubscribe) call
 
-    
-    myClient.remove(subscriptionId: subId)
-    
+```swift    
+myClient.remove(subscriptionId: subId)
+```
 
 ### CRUDing Collections
 
@@ -56,9 +58,9 @@ MeteorClient provides direct access to the low level insert / update / remove co
 
 Calling methods on the Meteor server is simple. A single method is provided:
 
-
-    call(method:, parameters: [], responseCallback: ? ) -> String?
-
+```swift    
+call(method:, parameters: [], responseCallback: ? ) -> String?
+```
 
 Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The method returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
 
@@ -67,12 +69,12 @@ Pass in the method name and any required parametes (these must already be in an 
 
 MeteorClient provides 4 login signatures as follows:
 
-    
-    logon(with token:, responseCallback: ?)
-    logonWith(username: , password:, responseCallback: ?)
-    logonWith(email:, password:, responseCallback: ?)
-    logonWith(usernameOrEmail:, password:, responseCallback: ?) 
-    
+```swift    
+logon(with token:, responseCallback: ?)
+logonWith(username: , password:, responseCallback: ?)
+logonWith(email:, password:, responseCallback: ?)
+logonWith(usernameOrEmail:, password:, responseCallback: ?) 
+```
 
 The first of these expects a previous cached session token. The rest take some combination of user identifier and password to complete the logon. Each of these takes an (optional) callback once the logon call returns. The response information generally includes a session token that can be used for future logon attempts.
 
@@ -80,17 +82,18 @@ The first of these expects a previous cached session token. The rest take some c
 
 The OAuth implementation is marked experimental and is (at this time) untested. The API is defined as follow:
 
-    
-    logon(withOAuthAccessToken:, serviceName:, optionsKey:, responseCallback: ?) 
-    
+```swift    
+logon(withOAuthAccessToken:, serviceName:, optionsKey:, responseCallback: ?) 
+```    
 
 ### SignUp
 
 There are a two methods available for creating an new account. They are:
 
-    signup(withUsername:, email:, password:, fullname:, responseCallback: ?)
-    signup(withUsername:, email:, password:, firstName:, lastName:, responseCallback: ?)
-    
+```swift    
+signup(withUsername:, email:, password:, fullname:, responseCallback: ?)
+signup(withUsername:, email:, password:, firstName:, lastName:, responseCallback: ?)
+```
 
 In both of the above cases, either the username or email (not both) can be ommitted, and the name will accept and empty string.
 
@@ -102,36 +105,38 @@ MeteorSwift defines the CollectionDecoder protocol which requires that a object 
 
 For example, with a simple object in a theoretical messaging app,
 
-
-    struct Message : Codable, CollectionDecoder {
-        let _id     : String
-        let body    : String
-        let time    : EJSONDate
-    }
-
+```swift    
+struct Message : Codable, CollectionDecoder {
+    let _id     : String
+    let body    : String
+    let time    : EJSONDate
+}
+```
 
 *Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type [(described below)](#ejsondate).*
 
 conforming to CollectionDecoder is as follows:
 
-
-    extension Message: CollectionDecoder { 
-        static let decode: MeteorDecoder = {
-            return try $1.decode(Message.self, from: $0)
-        }
-        
-        static let encode: MeteorEncoder = {
-            if let message = $0 as? Message {
-                return try $1.encode(message)
-            }
-            return nil
-        }
+```swift    
+extension Message: CollectionDecoder { 
+    static let decode: MeteorDecoder = {
+        return try $1.decode(Message.self, from: $0)
     }
-
+    
+    static let encode: MeteorEncoder = {
+        if let message = $0 as? Message {
+            return try $1.encode(message)
+        }
+        return nil
+    }
+}
+```
 
 You can inform the MeteorClient that a particular collection supports encoding and decoding to a specific type by registering the CollectionDecoder for that collection and type as follows:
 
+```swift    
     myClient.registerCodable("collection_name", collectionCoder: MyCollectionType.Type)
+```
 
 However, this is done automatically when you create a MongoCollection object [(see below)](#collection-decoder). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
 
@@ -164,16 +169,20 @@ MongoCollection employs generics to infer the expected type of the object in the
 
 You create a MongoCollection by providing the instance of Meteor it is going to connect to, and the name of the collection as follows:
 
+```swift    
     messages    = MongoCollection<Message>(meteor: meteor, collection: "MessageCollection")
+```
 
 ### MongoCollection CRUD operations
 
 MongoCollection implements the following CRUD operations
-        
+
+```swift    
     insert(object, responseCallback: callback?) -> String
     update(_id, changes: EJSONObject, responseCallback: callback?)
     remove(_id, responseCallback: callback?)
-    
+```
+
 These pretty much do what they imply.  The first inserts a new object into the collection, automatically encoding it to EJSON before sending. The third remove an object from the collection with the matching _id, and middle one updates an object.
 
 The update method is the only one that requires an EJSON object, and that object should have NSNull set for any fields that are being cleared. It does not update the local instance of the object, instead waiting for the server to resend the updated record as a change. Both insert and delete do make local changes accordinly. 
@@ -185,23 +194,26 @@ MongoCollection implements a find method that takes two closures, *matching* and
 The findOne method takes the same parameters and returns the first element of the equivalent find (or nil).
 
 For example, to find the most recent record in the Messages collection, the following would work
-    
+ 
+ ```swift    
     let mostRecent = messages.findOne(match: nil) { (one, two) in 
         return first.date.ms < two.date.ms 
     }
-    
+```
+
 ### Watching Collections
 
 MongoCollection allows you to register one or more watchers that monitor a collection for changes, each of these watchers accepts an optional *matching* closure that functions the same as with the find methods  describe above. If a record passing the *matching* closure is chaged, then the (non optional) callback method is called with the reason for the change (inserted, insertedBefore, moved, removed, or updated), the record _id and the record itself. If the record was removed, then a copy of the record that was removed is provided.
 
 As an example the following watches for any change to the messages collection:
 
-    let watchId = messages.watch(matching: nil, callback: (reason, _id, message) in {
-        if reason == .added {
-            display(newMessage: message)
-        }
+```swift    
+let watchId = messages.watch(matching: nil, callback: (reason, _id, message) in {
+    if reason == .added {
+        display(newMessage: message)
     }
-    
+}
+```    
 
 ## MeteorClient Types & Protocols
 
@@ -209,62 +221,71 @@ MeteorSwift defines a number of helper types and protocols that are summarized b
 
 ### Connect State Notifications
 
-    public extension Notification {
-        static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
-        static let MeteorClientDidConnect       = Notification.Name("sorr.swiftddp.connected")
-        static let MeteorClientDidDisconnect    = Notification.Name("sorr.swiftddp.disconnected")
-    }
+```swift    
+public extension Notification {
+    static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
+    static let MeteorClientDidConnect       = Notification.Name("sorr.swiftddp.connected")
+    static let MeteorClientDidDisconnect    = Notification.Name("sorr.swiftddp.disconnected")
+}
+```
 
 ### Client Errors
 
-    public enum MeteorClientError:Int {
-        case NotConnected
-        case DisconnectedBeforeCallbackComplete
-        case LogonRejected
-    }
+```swift    
+public enum MeteorClientError:Int {
+    case NotConnected
+    case DisconnectedBeforeCallbackComplete
+    case LogonRejected
+}
+```
 
 ###  OAuth Login State & Delegate
 
-    public enum AuthState:UInt {
-        case AuthStateNoAuth
-        case AuthStateLoggingIn
-        case AuthStateLoggedIn
-        // implies using auth but not currently authorized
-        case AuthStateLoggedOut
-    }
+```swift    
+public enum AuthState:UInt {
+    case AuthStateNoAuth
+    case AuthStateLoggingIn
+    case AuthStateLoggedIn
+    // implies using auth but not currently authorized
+    case AuthStateLoggedOut
+}
 
-    public protocol DDPAuthDelegate: class {
-        func authenticationWasSuccessful()
-        func authenticationFailed(withError: Error)
-    }
+public protocol DDPAuthDelegate: class {
+    func authenticationWasSuccessful()
+    func authenticationFailed(withError: Error)
+}
+```
 
 ### MeteorClient Types
 
-    public typealias EJSONObject                = [String: Any]
-    public typealias EJSONObjArray              = [EJSONObject]
+```swift    
+public typealias EJSONObject                = [String: Any]
+public typealias EJSONObjArray              = [EJSONObject]
 
-    public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
-    public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
+public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
+public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
 
-    public protocol CollectionDecoder {
-        static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
-        static func encode(value: Any, encoder: JSONEncoder) throws -> Data?
-    }
+public protocol CollectionDecoder {
+    static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
+    static func encode(value: Any, encoder: JSONEncoder) throws -> Data?
+}
+```
 
 ### MongoCollection Types
 
-    public typealias MeteorMatcher<T>      = (T) -> Bool
-    public typealias MeteorSorter<T>       = (T, T) -> Bool
-    public typealias CollectionCallback<T> = (ChangedReason, String, T?) -> Void
+```swift    
+public typealias MeteorMatcher<T>      = (T) -> Bool
+public typealias MeteorSorter<T>       = (T, T) -> Bool
+public typealias CollectionCallback<T> = (ChangedReason, String, T?) -> Void
 
-    public enum ChangedReason: String {
-        case added
-        case addedBefore
-        case movedBefore
-        case removed
-        case changed
-    }
-
+public enum ChangedReason: String {
+    case added
+    case addedBefore
+    case movedBefore
+    case removed
+    case changed
+}
+```
 
 
 
