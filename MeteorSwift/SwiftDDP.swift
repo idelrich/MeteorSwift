@@ -28,7 +28,9 @@ class SwiftDDP: NSObject {
         self.urlString  = withURLString
         self.delegate   = delegate
     }
-
+    var socketNotOpen:Bool {
+        return socketState != SRReadyState.OPEN
+    }
     func connectWebSocket()                                                                                 {
         // connect to the underlying websocket
         disconnectWebSocket()

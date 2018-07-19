@@ -97,10 +97,7 @@ extension MeteorClient { // Parsing
     private func parseObjectAndAddToCollection(_ message: DDPMessage) -> (String, Any)                      {
         
         let collectionName = message["collection"] as! String
-        var collection = collections[collectionName]
-        if collection == nil {
-            collection = MeteorCollection()
-        }
+        var collection = collections[collectionName, default: MeteorCollection()]
         //
         // Create the basic JSON Object by copying the fields.
         let (_id, value) = mongoObject(with: message)
@@ -111,7 +108,7 @@ extension MeteorClient { // Parsing
                 let data = try JSONSerialization.data(withJSONObject: value, options: [])
                 
                 if let result = try collectionCoder.decode(data, jsonDecoder) {
-                    collection!.add(result, for: _id)
+                    collection.add(result, for: _id)
                     collections[collectionName] = collection
                     return (_id, result)
                 }
@@ -122,17 +119,14 @@ extension MeteorClient { // Parsing
         } else {
             //print("MeteorSwift: No decoder for collection \(collectionName)")
         }
-        collection![_id] = value
+        collection[_id] = value
         collections[collectionName] = collection
         return (_id, value)
     }
     private func parseObjectAndAddToCollection(_ message: DDPMessage, beforeId: String?) -> (String, Any)   {
 
         let collectionName = message["collection"] as! String
-        var collection = collections[collectionName]
-        if collection == nil {
-            collection = MeteorCollection()
-        }
+        var collection = collections[collectionName, default: MeteorCollection()]
         //
         // Create the basic JSON Object by copying the fields.
         let (_id, value) = mongoObject(with: message)
@@ -144,11 +138,11 @@ extension MeteorClient { // Parsing
                 let data = try JSONSerialization.data(withJSONObject: value, options: [])
                 if let result = try collectionCoder.decode(data, jsonDecoder) {
                     if let documentId = beforeId {
-                        if let documentIndex = collection!.index(ofKey: documentId) {
-                            collection!.insert(value, for: _id, at: documentIndex)
+                        if let documentIndex = collection.index(ofKey: documentId) {
+                            collection.insert(value, for: _id, at: documentIndex)
                         }
                     } else {
-                        collection![_id] = result
+                        collection[_id] = result
                     }
                     collections[collectionName] = collection
                     return (_id, result)
@@ -160,11 +154,11 @@ extension MeteorClient { // Parsing
             return (_id, value)
         } else {
             if let documentId = beforeId {
-                if let documentIndex = collection!.index(ofKey: documentId) {
-                    collection!.insert(value, for: _id, at: documentIndex)
+                if let documentIndex = collection.index(ofKey: documentId) {
+                    collection.insert(value, for: _id, at: documentIndex)
                 }
             } else {
-                collection![_id] = value
+                collection[_id] = value
             }
             collections[collectionName] = collection
             return (_id, value)
@@ -175,16 +169,13 @@ extension MeteorClient { // Parsing
         let _id = message["id"] as! String // NSCopying
         let collectionName = message["collection"] as! String
         
-        var collection = collections[collectionName]
-        if collection == nil {
-            collection = MeteorCollection()
-        }
-        
+        var collection = collections[collectionName, default: MeteorCollection()]
+
         if let collectionCoder = codables[collectionName] {
             //
             // This collection is codable, convert it.
             do {
-                if let data = try collectionCoder.encode(collection![_id]!, jsonEncoder) {
+                if let data = try collectionCoder.encode(collection[_id]!, jsonEncoder) {
                     //
                     // Merge changes into the original object.
                     let json = try? JSONSerialization.jsonObject(with: data, options: [])
@@ -208,7 +199,7 @@ extension MeteorClient { // Parsing
                         do {
                             if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
                                 if let result = try collectionCoder.decode(data, jsonDecoder) {
-                                    collection![_id] = result
+                                    collection[_id] = result
                                     collections[collectionName] = collection
                                     return (_id, result)
                                 }
@@ -223,19 +214,19 @@ extension MeteorClient { // Parsing
                 print("MeteorSwift: Failed to encode element in \(collectionName) - reported error \(error.localizedDescription)")
             }
             
-            return (_id, collection![_id]!)
+            return (_id, collection[_id]!)
         } else {
             var (_id, value) = mongoObject(with: message)
             for key in message["cleared"] as! [String] {
                 value.removeValue(forKey:key)
             }
-            collection![_id] = value
+            collection[_id] = value
             
             collections[collectionName] = collection
             return (_id, value)
         }
     }
-    private func parseRemoved(_ message: DDPMessage) -> (String, Any?)                                              {
+    private func parseRemoved(_ message: DDPMessage) -> (String, Any?)                                      {
         let _id     = message["id"] as! String
         var value  : Any?
         if let collectionName = message["collection"] as? String,
@@ -247,7 +238,7 @@ extension MeteorClient { // Parsing
         return (_id, value)
     }
     
-    private func mongoObject(with message: DDPMessage) -> (String, EJSONObject) {
+    private func mongoObject(with message: DDPMessage) -> (String, EJSONObject)                             {
         let _id = message["id"] as! String
         var result = ["_id": _id] as EJSONObject
         for (key, value) in message["fields"] as! EJSONObject {
@@ -255,7 +246,7 @@ extension MeteorClient { // Parsing
         }
         return (_id, result)
     }
-    private func sendNotification(for msg: String, collection: String, id: String, value: Any?)            {
+    private func sendNotification(for msg: String, collection: String, id: String, value: Any?)             {
         var userInfo:[String: Any] = ["msg": msg, "_id": id]
         if let value = value {
             userInfo["result"] = value

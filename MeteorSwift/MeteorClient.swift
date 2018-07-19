@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import SocketRocket
-import SCrypto
 
 public extension Notification {
     static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
@@ -47,10 +45,9 @@ public protocol DDPAuthDelegate: class {
     func authenticationFailed(withError: Error)
 }
 
-
-/// Helper type EJSON (JSON) object
+/// Helper type EJSON (JSON) object for Meteor
 public typealias EJSONObject                = [String: Any]
-/// Helper type array of EJSON (JSON) objects
+/// Helper type array of EJSON (JSON) objects for Meteor
 public typealias EJSONObjArray              = [EJSONObject]
 
 /// Response callback for any invocation of a Meteor method
@@ -61,6 +58,7 @@ public typealias SubscriptionCallback       = (Notification.Name, String) -> Voi
 public typealias MeteorDecoder              = (Data, JSONDecoder) throws ->  Any?
 /// Codable encoder method (see CollectionDecoder)
 public typealias MeteorEncoder              = (Any, JSONEncoder) throws -> Data?
+
 /// CollectionDecoder
 ///
 /// Allows the client to register Swift types that comply to the Codable
@@ -149,7 +147,6 @@ public class MeteorClient: NSObject {
     public func resetCollections() {
         collections.removeAll()
     }
-
     /// Provides low level insert support for a collection
     ///
     /// - Parameters:
@@ -169,9 +166,11 @@ public class MeteorClient: NSObject {
                 insert["_id"] = _id
             }
             call(method: "/\(collectionName)/insert", parameters: [insert], responseCallback: responseCallback)
-            //
-            // TODO: Insert it locally as well
             
+            var collection = collections[collectionName, default: MeteorCollection()]
+            collection.add(object, for: _id!)
+            collections[collectionName] = collection
+
             return _id
         }
         return nil
@@ -205,6 +204,11 @@ public class MeteorClient: NSObject {
     public func remove(from collectionName: String, objectWithId _id: String, responseCallback: MeteorClientMethodCallback?) {
         
         call(method: "/\(collectionName)/remove", parameters: [["_id", _id]], responseCallback: responseCallback)
+    
+        var collection = collections[collectionName, default: MeteorCollection()]
+        collection.remove(key: _id)
+        collections[collectionName] = collection
+
     }
     /// Sends a method to the Meteor server with an option to post a notification
     /// when the method response is received.
@@ -242,7 +246,7 @@ public class MeteorClient: NSObject {
     /// Records a subscription for content with the Meteor server
     ///
     /// - Parameters:
-    ///   - name: Name of the subscription
+    ///   - subscription: Name of the subscription
     ///   - withParameters: (Optional) parameters for the subscription
     ///   - callback: (Optional) callback to be called once the subscription is ready.
     /// - Returns: A subscriptionId which must be used to stop/remove the subscription
@@ -263,7 +267,7 @@ public class MeteorClient: NSObject {
     }
     /// Stop / Remove a pre-existing subscrion
     ///
-    /// - Parameter uid: The subscriptionId return by the add(subscription:) method
+    /// - Parameter uid: A subscriptionId returned by the add(subscription:) method
     public func remove(subscriptionId uid: String) {
         guard okToSend else { return }
         ddp?.unsubscribe(withId: uid)
@@ -275,14 +279,13 @@ public class MeteorClient: NSObject {
             return connected
         }
     }
-    
-    // tokenExpires.$date : expiry date
     /// Logon to the Meteor client using a pre-existing session token.
     ///
     /// - Parameters:
     ///   - token: A pre-existing session token
     ///   - responseCallback: A callback with the results of loggin in.
     public func logon(with token: String, responseCallback: MeteorClientMethodCallback?) {
+        // tokenExpires.$date : expiry date
         sessionToken = token
         setAuthStateToLoggingIn()
         call(method: "login", parameters: ["resume", sessionToken!]) {
@@ -297,15 +300,31 @@ public class MeteorClient: NSObject {
             responseCallback?($0, $1)
         }
     }
-    
+    /// Login to Meteor Client with a user name and password.
+    ///
+    /// - Parameters:
+    ///   - username: The username to login with
+    ///   - password: The password to login with. This will be SHA256 encoded before transmitting.
+    ///   - responseCallback: (Optional) callback once login requestion completes.
     public func logonWith(username: String, password:String, responseCallback: MeteorClientMethodCallback? = nil) {
         logon(withUserParameters: buildUserParameters(withUsername: username, password:password), responseCallback: responseCallback)
     }
-    
+    /// Login to Meteor Client with an email and password.
+    ///
+    /// - Parameters:
+    ///   - email: The username to login with
+    ///   - password: The password to login with. This will be SHA256 encoded before transmitting.
+    ///   - responseCallback: (Optional) callback once login requestion completes.
     public func logonWith(email: String, password: String, responseCallback: MeteorClientMethodCallback? = nil) {
         logon(withUserParameters: buildUserParameters(withEmail: email, password:password), responseCallback: responseCallback)
     }
     
+    /// Login to Meteor Client with an email/username and password.
+    ///
+    /// - Parameters:
+    ///   - usernameOrEmail: The username / email to login with
+    ///   - password: The password to login with. This will be SHA256 encoded before transmitting.
+    ///   - responseCallback: (Optional) callback once login requestion completes.
     public func logonWith(usernameOrEmail: String, password: String, responseCallback: MeteorClientMethodCallback?) {
         logon(withUserParameters: buildUserParameters(withUsernameOrEmail: usernameOrEmail, password:password), responseCallback: responseCallback)
     }
@@ -323,13 +342,29 @@ public class MeteorClient: NSObject {
      * If an sdk only allows login returns long-lived token, modify your accounts-x package,
      * and add your package to the if(serviceName.compare("facebook")) in _buildOAuthRequestStringWithAccessToken
      */
+    
+    /// Experimental? Logon with an OAuth token
+    ///
+    /// - Parameters:
+    ///   - token: OAuth token to login with
+    ///   - serviceName: OAuth service to login to (i.e. facebook)
+    ///   - responseCallback: (Optional) callback once login requestion completes.
     public func logon(withOAuthAccessToken token: String, serviceName: String, responseCallback: MeteorClientMethodCallback?) {
         logon(withOAuthAccessToken: token, serviceName:serviceName, optionsKey:"oauth", responseCallback:responseCallback)
     }
     
-    // some meteor servers provide a custom login handler with a custom options key. Allow client to configure the key instead of always using "oauth"
+    /// Experimental? Logon with an OAuth token.
+    /// Some meteor servers provide a custom login handler with a custom options key.
+    /// Allow client to configure the key instead of always using "oauth"
+    ///
+    /// - Parameters:
+    ///   - token: OAuth token to login with
+    ///   - serviceName: OAuth service to login to (i.e. facebook)
+    ///   - optionsKey: key to use for OAuth
+    ///   - responseCallback: (Optional) callback once login requestion completes.
     public func logon(withOAuthAccessToken token: String, serviceName: String, optionsKey: String, responseCallback:MeteorClientMethodCallback?) {
         
+        //
         // generates random secret (credentialToken)
         let url = buildOAuthRequestString(with: token, serviceName: serviceName)
         
@@ -356,39 +391,15 @@ public class MeteorClient: NSObject {
             }
         }
     }
-    
-    private func logon(withUserParameters: EJSONObject, responseCallback: MeteorClientMethodCallback?) {
-        guard authState != .AuthStateLoggingIn else {
-            let errorDesc = "You must wait for the current logon request to finish before sending another."
-            let logonError = NSError(domain: MeteorClient.MeteorTransportErrorDomain,
-                                     code: MeteorClientError.LogonRejected.rawValue,
-                                     userInfo: [NSLocalizedDescriptionKey: errorDesc])
-            responseCallback?(nil, logonError)
-            return
-        }
-        
-        guard !rejectIfNotConnected(responseCallback: responseCallback) else {
-            return
-        }
-        
-        setAuthStateToLoggingIn()
-        
-        call(method: "login", parameters: [withUserParameters]) {
-            if let error = $1 {
-                self.setAuthStatetoLoggedOut()
-                self.authDelegate?.authenticationFailed(withError: error)
-            } else if let response = $0 as? EJSONObject {
-                // tokenExpires.$date : expiry date
-                if let result = response["result"] as? EJSONObject {
-                    self.setAuthStateToLoggedIn(userId: result["id"] as! String, withToken: result["token"] as! String)
-                    self.authDelegate?.authenticationWasSuccessful()
-                }
-            }
-            responseCallback?($0, $1)
-        }
-    }
-    
-    func signup(withUsername user: String = "", email: String = "", password: String,
+    /// Signup (create a new account) with full details
+    ///
+    /// - Parameters:
+    ///   - user: user name for new account
+    ///   - email: email for new account
+    ///   - password: password for new account
+    ///   - fullname: name of user (for profile)
+    ///   - responseCallback: (Optional) callback once login requestion completes.
+    public func signup(withUsername user: String = "", email: String = "", password: String,
                 fullname: String, responseCallback: MeteorClientMethodCallback?) {
         
         guard (!user.isEmpty || !email.isEmpty) && !password.isEmpty else {
@@ -403,8 +414,16 @@ public class MeteorClient: NSObject {
         let params = buildUserParametersSignup(username:user, email:email, password:password, fullname:fullname)
         signup(withUserParameters: params, responseCallback:responseCallback)
     }
-    
-    func signup(withUsername user: String = "", email: String = "", password: String,
+    /// Signup (create a new account) with full details
+    ///
+    /// - Parameters:
+    ///   - user: user name for new account
+    ///   - email: email for new account
+    ///   - password: password for new account
+    ///   - firstName: first name of user (for profile)
+    ///   - lastName: last name of user (for profile)
+    ///   - responseCallback: (Optional) callback once login requestion completes.
+    public func signup(withUsername user: String = "", email: String = "", password: String,
                 firstName: String, lastName: String, responseCallback: MeteorClientMethodCallback?) {
     
         guard (!user.isEmpty || !email.isEmpty) && !password.isEmpty else {
@@ -420,53 +439,20 @@ public class MeteorClient: NSObject {
         signup(withUserParameters: params, responseCallback:responseCallback)
     }
     
-    func signup(withUserParameters params:EJSONObject, responseCallback: MeteorClientMethodCallback?) {
-        
-        guard authState != .AuthStateLoggingIn else {
-            let errorDesc = "You must wait for the current signup request to finish before sending another."
-            let logonError = NSError(domain: MeteorClient.MeteorTransportErrorDomain,
-                                     code:MeteorClientError.LogonRejected.rawValue,
-                                     userInfo: [NSLocalizedDescriptionKey: errorDesc])
-            authDelegate?.authenticationFailed(withError: logonError)
-            responseCallback?(nil, logonError)
-            return
-        }
-        setAuthStateToLoggingIn()
-        
-        call(method: "createUser", parameters: [params]) {
-            
-            if let error = $1 {
-                self.setAuthStatetoLoggedOut()
-                self.authDelegate?.authenticationFailed(withError: error)
-            } else if let result = $0?["result"] as? EJSONObject {
-                self.setAuthStateToLoggedIn(userId: result["id"] as! String, withToken: result["token"]  as! String)
-                self.authDelegate?.authenticationWasSuccessful()
-            }
-            responseCallback?($0, $1)
-        }
-    }
-        
-    func logout() {
+    /// Logout of current session.
+    public func logout() {
         ddp?.method(withId: DDPIdGenerator.nextId, method: "logout", parameters:nil)
         setAuthStatetoLoggedOut()
     }
-    
     @objc func reconnect() {
-        guard ddp?.socketState != SRReadyState.OPEN else {
+        guard let ddp = ddp, ddp.socketNotOpen else {
             return
         }
-        ddp?.connectWebSocket()
-    }
-    
-    func ping() {
-        guard connected else {
-            return
-        }
-        ddp?.ping(id: DDPIdGenerator.nextId)
+        ddp.connectWebSocket()
     }
     
     // MARK - Internal
-    private func send(notify: Bool, parameters: [Any]?, methodName: String) -> String? {
+    func send(notify: Bool, parameters: [Any]?, methodName: String) -> String? {
         let methodId = DDPIdGenerator.nextId
         if notify {
             _methodIds.insert(methodId)
@@ -474,75 +460,6 @@ public class MeteorClient: NSObject {
         ddp?.method(withId: methodId, method:methodName, parameters:parameters)
         return methodId
     }
-    
-    fileprivate func resetBackoff() {
-        _tries = 1
-    }
-    
-    fileprivate func handleConnectionError() {
-        websocketReady = false
-        connected = false
-        invalidateUnresolvedMethods()
-        NotificationCenter.default.post(name: Notification.MeteorClientDidDisconnect, object:self)
-        if _disconnecting {
-            _disconnecting = false
-            return
-        }
-        //
-        let timeInterval = Double(5.0 * _tries)
-        
-        if (_tries != _maxRetryIncrement) {
-            _tries += 1
-        }
-        perform(#selector(reconnect), with:self, afterDelay:timeInterval)
-    }
-    
-    func invalidateUnresolvedMethods() {
-        for methodId in _methodIds {
-            if let callback = _responseCallbacks[methodId] {
-                callback(nil, NSError(domain: MeteorClient.MeteorTransportErrorDomain,
-                                    code: MeteorClientError.DisconnectedBeforeCallbackComplete.rawValue,
-                                    userInfo: [NSLocalizedDescriptionKey: "You were disconnected"]))
-            }
-        }
-        _methodIds.removeAll()
-        _responseCallbacks.removeAll()
-    }
-    
-    fileprivate func makeMeteorDataSubscriptions() {
-        for (uid, name) in subscriptions {
-            let params = _subscriptionsParameters[uid]
-            ddp?.subscribe(withId: uid, name: name, parameters:params)
-        }
-    }
-    
-    private func rejectIfNotConnected(responseCallback: MeteorClientMethodCallback?) -> Bool {
-        guard okToSend else {
-            let userInfo = [NSLocalizedDescriptionKey: "You are not connected"]
-            let notConnectedError = NSError(domain: MeteorClient.MeteorTransportErrorDomain,
-                                            code: MeteorClientError.NotConnected.rawValue,
-                                            userInfo:userInfo)
-            responseCallback?(nil, notConnectedError)
-            return true
-        }
-        return false
-    }
-    
-    private func setAuthStateToLoggingIn() {
-        authState = .AuthStateLoggingIn
-    }
-    
-    private func setAuthStateToLoggedIn(userId id: String, withToken: String) {
-        authState = .AuthStateLoggedIn
-        userId = id
-        sessionToken = withToken
-    }
-    
-    private func setAuthStatetoLoggedOut() {
-        authState = .AuthStateLoggedOut
-        userId = nil
-    }
-    
     func convertToEJSON(collection name:String, object: Any) -> EJSONObject? {
         if let collectionCoder = codables[name] {
             do {
@@ -565,212 +482,54 @@ public class MeteorClient: NSObject {
         }
         return nil
     }
-    func buildUserParametersSignup(username:String, email: String, password: String, fullname: String) -> EJSONObject {
-        return ["username": username, "email": email,
-                "password": [ "digest": password.SHA256(), "algorithm": "sha-256" ],
-                "profile": ["fullname": fullname, "signupToken": ""]]
-    }
-    
-    func buildUserParametersSignup(username:String, email:String, password:String,
-                                   firstName: String, lastName:String) -> EJSONObject {
-        
-        return ["username": username, "email": email,
-                "password": [ "digest": password.SHA256(), "algorithm": "sha-256" ],
-                "profile": ["first_name": firstName, "last_name": lastName,"signupToken": ""]]
-    }
-    
-    func buildUserParameters(withUsername: String, password: String) -> EJSONObject   {
-        return ["user": ["username": withUsername], "password": ["digest": password.SHA256(), "algorithm": "sha-256" ]]
-    }
-    
-    private func buildUserParameters(withEmail: String, password: String) -> EJSONObject    {
-        return ["user": ["email": withEmail], "password": ["digest": password.SHA256(), "algorithm": "sha-256" ]]
-    }
-    
-    private func buildUserParameters(withUsernameOrEmail: String, password: String) -> EJSONObject   {
-        if withUsernameOrEmail.contains("@") {
-            return buildUserParameters(withEmail:withUsernameOrEmail, password:password)
-        } else {
-            return buildUserParameters(withUsername:withUsernameOrEmail, password:password)
-        }
-    }
-    
-    func buildOAuthRequestString(with accessToken:String, serviceName: String) -> String    {
-        
-        if var homeUrl = ddp?.url {
-            homeUrl = homeUrl.replacingOccurrences(of: "/websocket", with: "")
-            //remove ws/wss and replace with http/https
-            if homeUrl.starts(with: "ws/") {
-                homeUrl = "http" + homeUrl.dropFirst(2)
-            } else {
-                homeUrl = "https" + homeUrl.dropFirst(3)
-            }
-            
-            var tokenType = ""
-            //
-            // facebook sdk can only send access token, others send a one time code
-            if serviceName == "facebook" {
-                tokenType = "accessToken"
-            } else {
-                tokenType = "code"
-            }
-            let state = generateState(withToken: randomSecret())
-            
-            return "\(homeUrl)/_oauth/\(serviceName)/?\(tokenType)=\(accessToken)&state=\(state)"
-        }
-        return ""
-    }
-    
-    func buildUserParameters(withOAuthAccessToken: String) -> EJSONObject {
-        return EJSONObject()
-    }
-    
-    //functions for OAuth
-    
-    //generates base64 string for json
-    func generateState(withToken: String) -> String {
-        if let jsonData = try? JSONSerialization.data(withJSONObject: ["credentialToken": withToken, "loginStyle": "popup"], options: []) {
 
-            return jsonData.base64EncodedString(options: .endLineWithLineFeed)
-        }
-        return ""
+    func resetBackoff() {
+        _tries = 1
     }
-    
-    //generates random secret for credential token
-    private func randomSecret() -> String {
-        let BASE64_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" as NSString
-        let s = NSMutableString(capacity:20)
-        for _ in 0..<20 {
-            let r = Int(arc4random() % UInt32(BASE64_CHARS.length))
-            let c = BASE64_CHARS.character(at: r)
-            s.appendFormat("%C", c)
-        }
-        return s as String
-    }
-    
-    func makeHTTPRequest(at url: String, completion: @escaping (String?) -> Void ) {
-        guard let url = URL(string: url) else {
-            completion(nil)
+    func handleConnectionError() {
+        websocketReady = false
+        connected = false
+        invalidateUnresolvedMethods()
+        NotificationCenter.default.post(name: Notification.MeteorClientDidDisconnect, object:self)
+        if _disconnecting {
+            _disconnecting = false
             return
         }
+        //
+        let timeInterval = Double(5.0 * _tries)
         
-        let request = NSMutableURLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request as URLRequest, completionHandler:{ (data, response, error) in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("MeteorSwift: Error getting \(url), Error: \(error)")
-                } else {
-                    if let code = response as? HTTPURLResponse {
-                        guard code.statusCode == 200 else {
-                            print("MeteorSwift: Error getting \(url), HTTP status code \(code.statusCode)")
-                            completion(nil)
-                            return
-                        }
-                        if let data = data {
-                            completion(String(data: data, encoding: .utf8))
-                        }
-                    }
-                }
-                completion(nil)
+        if (_tries != _maxRetryIncrement) {
+            _tries += 1
+        }
+        perform(#selector(reconnect), with:self, afterDelay:timeInterval)
+    }
+    func invalidateUnresolvedMethods() {
+        for methodId in _methodIds {
+            if let callback = _responseCallbacks[methodId] {
+                callback(nil, NSError(domain: MeteorClient.MeteorTransportErrorDomain,
+                                    code: MeteorClientError.DisconnectedBeforeCallbackComplete.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: "You were disconnected"]))
             }
-        }).resume()
-    }
-        
-    func handleOAuthCallback(callback:String?) -> EJSONObject? {
-        // it's possible callback is nil
-       
-        guard var callback = callback else {
-            return nil
         }
-        if let regex = try? NSRegularExpression(pattern: "<div id=\"config\" style=\"display:none;\">(.*?)</div>") {
-            
-            let range = regex.rangeOfFirstMatch(in: callback, range: NSRange(0..<callback.count))
-            callback = String(callback[Range(range, in: callback)!])
-            
-            return try? JSONSerialization.jsonObject(with: callback.data(using: .utf8)!, options: []) as! EJSONObject
-        }
-        return nil
+        _methodIds.removeAll()
+        _responseCallbacks.removeAll()
     }
-}
-
-extension MeteorClient : SwiftDDPDelegate {
+    func makeMeteorDataSubscriptions() {
+        for (uid, name) in subscriptions {
+            let params = _subscriptionsParameters[uid]
+            ddp?.subscribe(withId: uid, name: name, parameters:params)
+        }
+    }
+    func rejectIfNotConnected(responseCallback: MeteorClientMethodCallback?) -> Bool {
+        guard okToSend else {
+            let userInfo = [NSLocalizedDescriptionKey: "You are not connected"]
+            let notConnectedError = NSError(domain: MeteorClient.MeteorTransportErrorDomain,
+                                            code: MeteorClientError.NotConnected.rawValue,
+                                            userInfo:userInfo)
+            responseCallback?(nil, notConnectedError)
+            return true
+        }
+        return false
+    }
     
-    func didReceive(message: DDPMessage) {
-        guard let msg = message["msg"] as? String else { return }
-
-        let messageId = message["id"] as? String
-        
-        switch msg {
-        case "result":
-            if let messageId = messageId {
-                handleMethodResult(withMessageId: messageId, message:message)
-            } else {
-                print("MeteorSwift: Missing message ID \(message)")
-            }
-        case "added":
-            handleAdded(message: message)
-        case "addedBefore":
-            handleAddedBefore(message:message)
-        case "movedBefore":
-            handleMovedBefore(message:message)
-        case "removed":
-            handleRemoved(message: message)
-        case "changed":
-            handleChanged(message: message)
-        case "ping":
-            ddp?.pong(id: messageId)
-        case "connected":
-            connected = true
-            NotificationCenter.default.post(name: Notification.MeteorClientConnectionReady, object:self)
-            if let sessionToken = sessionToken { //TODO check expiry date
-                logon(with: sessionToken, responseCallback: nil)
-            }
-            makeMeteorDataSubscriptions()
-        case "ready":
-            if let subs = message["subs"] as? [String] {
-                for readySubscriptionId in subs {
-                    if let name = subscriptions[readySubscriptionId] {
-                        let notificationName = Notification.Name(rawValue: "\(name)_ready")
-                        NotificationCenter.default.post(name: notificationName, object:self, userInfo: ["SubscriptionId": readySubscriptionId])
-                        if let callback = _subscriptionCallback[readySubscriptionId] {
-                            callback(notificationName, readySubscriptionId)
-                        }
-                        break
-                    }
-                }
-            }
-        case "updated":
-            if let methods = message["methods"] as? [String] {
-                for updateMethod in methods {
-                    for methodId in _methodIds {
-                        if (methodId == updateMethod) {
-                            let notificationName = Notification.Name(rawValue: "\(methodId)_update")
-                            NotificationCenter.default.post(name: notificationName, object:self)
-                            break
-                        }
-                    }
-                }
-            }
-            
-        case "nosub", "error":
-            break
-        default:
-            break
-        }
-    }
-    func didOpen() {
-        websocketReady = true
-        resetBackoff()
-        resetCollections()
-        ddp?.connect(withSession: nil, version: ddpVersion, support: _supportedVersions)
-        NotificationCenter.default.post(name: Notification.MeteorClientDidConnect, object: self)
-    }
-    func didReceive(connectionError: Error) {
-        handleConnectionError()
-    }
-    func didReceiveConnectionClose() {
-        handleConnectionError()
-    }
 }

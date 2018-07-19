@@ -9,7 +9,7 @@
 import Foundation
 
 /// A closure that takes the expected type and returns Bool if the record should be included.
-public typealias MeteorPredicate<T>    = (T) -> Bool
+public typealias MeteorMatcher<T>       = (T) -> Bool
 /// A closure that takes the expected type and returns the descired sort order.
 public typealias MeteorSorter<T>       = (T, T) -> Bool
 /// A closure that nortifies a client when changes to a collection occur.
@@ -69,11 +69,11 @@ public struct MongoCollection<T> {
     /// Update an object in the collection
     ///
     /// - Parameters:
-    ///   - objectWithId: _id if the object being updated
+    ///   - _id: id if the object being updated
     ///   - changes: EJSONObj containing the required updates. Fields marked with NSNull are
     ///              $unset, while other fields are $set.
     ///   - responseCallback: (Optional) callback to be called once server completes this response
-    public func update(objectWithId _id: String, changes: EJSONObject, responseCallback: MeteorClientMethodCallback? = nil) {
+    public func update(_ _id: String, changes: EJSONObject, responseCallback: MeteorClientMethodCallback? = nil) {
         meteor.update(into: name, objectWithId: _id, changes: changes, responseCallback: responseCallback)
     }
     /// Remove an object with the specified id from this collection
@@ -88,10 +88,10 @@ public struct MongoCollection<T> {
     /// the provided (optional) sorting closure
     ///
     /// - Parameters:
-    ///   - matching: A MeteorPredicate closure that determines which records to include
+    ///   - matching: (Optional) A MeteorPredicate closure that determines which records to include
     ///   - sorted: (Optional) A MeteorSorter closure that determines how to sort records.
     /// - Returns: An array of the type held in this collection
-    public func find(matching: MeteorPredicate<T>? = nil, sorted: MeteorSorter<T>? = nil) -> [T] {
+    public func find(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> [T] {
         
         if let collection = meteor.collections[name] {
             var results:[T] = collection.values.compactMap({
@@ -113,16 +113,16 @@ public struct MongoCollection<T> {
     ///   - matching: A MeteorPredicate closure that determines which records to include
     ///   - sorted: (Optional) A MeteorSorter closure that determines how to sort records.
     /// - Returns: The first element of the resulting find if any
-    public func findOne(matching: MeteorPredicate<T>? = nil, sorted: MeteorSorter<T>? = nil) -> T? {
+    public func findOne(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> T? {
         return find(matching: matching, sorted: sorted).first
     }
     /// Establishes a "watch" on changes to this collection.
     ///
     /// - Parameters:
     ///   - matching: A MeteorPredicate closure that determines which records to watch include
-    ///   - callback: A callback that provides information about any changes
+    ///   - callback: A callback that provides information about any changes to records in the collection
     /// - Returns: A String id that must be used to stop watching this collection (see stopWatching)
-    public func watch(matching: MeteorPredicate<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
+    public func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
         return watcher.watch(matching: matching, callback: callback)
     }
     /// Stops a previously established "watch" on changes to this collection
@@ -139,7 +139,7 @@ public struct MongoCollection<T> {
 }
 
 class MeteorWatcher<T>: NSObject {
-    private var watchList   = [String: (MeteorPredicate<T>?, CollectionCallback<T>)]()
+    private var watchList   = [String: (MeteorMatcher<T>?, CollectionCallback<T>)]()
 
     private let meteor      : MeteorClient
     private let collection  : String
@@ -150,7 +150,7 @@ class MeteorWatcher<T>: NSObject {
         
         super.init()
     }
-    func watch(matching: MeteorPredicate<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
+    func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
         if watchList.isEmpty {
             addObservers()
         }

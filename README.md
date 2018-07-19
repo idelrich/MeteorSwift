@@ -46,13 +46,52 @@ to stop a subscription (unsubscribe) call
     myClient.remove(subscriptionId: subId)
     
 
-### Login & SignUp
+### Logon
 
-To Be Written
+MeteorClient provides 4 login signatures as follows:
+
+    
+    logon(with token:, responseCallback: ?)
+    logonWith(username: , password:, responseCallback: ?)
+    logonWith(email:, password:, responseCallback: ?)
+    logonWith(usernameOrEmail:, password:, responseCallback: ?) 
+    
+
+The first of these expects a previous cached session token. The rest take some combination of user identifier and password to complete the logon. Each of these takes an (optional) callback once the logon call returns. The response information generally includes a session token that can be used for future logon attempts.
+
+### OAuth
+
+The OAuth implementation is marked experimental and is (at this time) untested. The API is defined as follow:
+
+    
+    logon(withOAuthAccessToken:, serviceName:, optionsKey:, responseCallback: ?) 
+    
+
+### SignUp
+
+There are a two methods available for creating an new account. They are:
+
+    signup(withUsername:, email:, password:, fullname:, responseCallback: ?)
+    signup(withUsername:, email:, password:, firstName:, lastName:, responseCallback: ?)
+    
+
+In both of the above cases, either the username or email (not both) can be ommitted, and the name will accept and empty string.
+
+*NOTE: In general creating a new account does NOT automatically logon to that account, instead, upon success the client should call one of the logon methods described above.*
 
 ### CRUDing Collections
 
 MeteorClient provides direct access to the low level insert / update / remove collection operations if they have't been forbidden on the server side, however it is better to access these directly through MongoCollection structs (see Collections below).
+
+### Calling Meteor Methods
+
+Calling methods on the Meteor server is simple. A single method is provided:
+
+    
+    call(method:, parameters: [], responseCallback: ? ) -> String?
+    
+
+Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The method returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
 
 ### CollectionDecoder
 
@@ -115,12 +154,107 @@ You create a Mongo collection collection by providing the instance of Meteor it 
 
     messages    = MongoCollection<Message>(meteor: meteor, collection: "MessageCollection")
 
+### CRUD operations
 
-### find and findOne
+MongoCollection implements the following CRUD operations
+        
+    insert(object, responseCallback: callback?) -> String
+    update(_id, changes: EJSONObject, responseCallback: callback?)
+    remove(_id, responseCallback: callback?)
+    
+These pretty much do what they imply.  The first inserts a new object into the collection, automatically encoding it to EJSON before sending. The third remove an object from the collection with the matching _id, and middle one updates an object.
 
+The update method is the only one that requires an EJSON object, and that object should have NSNull set for any fields that are being cleared. It does not update the local instance of the object, instead waiting for the server to resend the updated record as a change. Both insert and delete do make local changes accordinly. 
 
+### Find and findOne
 
+MongoCollection implements a find method that takes two closures, *matching* and *sorted* both of which are optional. The *matching* closure is take a single element from the collection and returns a Bool if the element should be included. This essentially filters the available records. The *sorted* closure takes two elements and returns true if the first element is greater (should be sorted after) the second. Passing nil for *matching* returns all elements, and passing nil for *sorted* returns the records in the same order as they were published.
 
+The findOne method takes the same parameters and returns the first element of the equivalent find (or nil).
+
+For example, to find the most recent record in the Messages collection, the following would work
+    
+    let mostRecent = messages.findOne(match: nil) { (one, two) in 
+        return first.date.ms < two.date.ms 
+    }
+    
+### Watching Collections
+
+MongoCollection allows you to register one or more watchers that monitor a collection for changes, each of these watchers accepts an optional *matching* closure that functions the same as with the find methods  describe above. If a record passing the *matching* closure is chaged, then the (non optional) callback method is called with the reason for the change (inserted, insertedBefore, moved, removed, or updated), the record _id and the record itself. If the record was removed, then a copy of the record that was removed is provided.
+
+As an example the following watches for any change to the messages collection:
+
+    let watchId = messages.watch(matching: nil, callback: (reason, _id, message) in {
+        if reason == .added {
+            display(newMessage: message)
+        }
+    }
+    
+
+## MeteorClient Types & Protocols
+
+MeteorSwift defines a number of helper types and protocols that are summarized below:
+
+### Connect State Notifications
+
+    public extension Notification {
+        static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
+        static let MeteorClientDidConnect       = Notification.Name("sorr.swiftddp.connected")
+        static let MeteorClientDidDisconnect    = Notification.Name("sorr.swiftddp.disconnected")
+    }
+
+### Client Errors
+
+    public enum MeteorClientError:Int {
+        case NotConnected
+        case DisconnectedBeforeCallbackComplete
+        case LogonRejected
+    }
+
+###  OAuth Login State & Delegate
+
+    public enum AuthState:UInt {
+        case AuthStateNoAuth
+        case AuthStateLoggingIn
+        case AuthStateLoggedIn
+        // implies using auth but not currently authorized
+        case AuthStateLoggedOut
+    }
+
+    public protocol DDPAuthDelegate: class {
+        func authenticationWasSuccessful()
+        func authenticationFailed(withError: Error)
+    }
+
+### MeteorClient Types
+
+    public typealias EJSONObject                = [String: Any]
+    public typealias EJSONObjArray              = [EJSONObject]
+
+    public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
+    public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
+
+    public typealias MeteorDecoder              = (Data, JSONDecoder) throws ->  Any?
+    public typealias MeteorEncoder              = (Any, JSONEncoder) throws -> Data?
+    
+    public protocol CollectionDecoder {
+        static var decode: MeteorDecoder { get }
+        static var encode: MeteorEncoder { get }
+    }
+
+### MongoCollection Types
+
+    public typealias MeteorMatcher<T>      = (T) -> Bool
+    public typealias MeteorSorter<T>       = (T, T) -> Bool
+    public typealias CollectionCallback<T> = (ChangedReason, String, T?) -> Void
+
+    public enum ChangedReason: String {
+        case added
+        case addedBefore
+        case movedBefore
+        case removed
+        case changed
+    }
 
 
 
