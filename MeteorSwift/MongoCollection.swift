@@ -52,7 +52,6 @@ public struct MongoCollection<T> {
         watcher = MeteorWatcher(meteor: meteor, collection: collection)
         
         if let coder = T.self as? CollectionDecoder.Type {
-            print("Register Codable for \(name)")
             meteor.registerCodable(collection, collectionCoder: coder)
         }
     }

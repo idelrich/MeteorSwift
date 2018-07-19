@@ -13,7 +13,7 @@ MeteorSwift provides a small number of key classes and a number of typealiases t
 
 ## MeteorClient
 
-This class provides the client side implementation for a Meteor implementation.  This includes methods to login, signin, manage subscriptions, make method calls and CRUD Mongo Collections. Direct access to the collection is NOT supported via the MeteorClient, but is instead managed via the MongoCollection struct type (see below).
+This class provides the client side implementation for a Meteor implementation.  This includes methods to logon, signin, manage subscriptions, make method calls and CRUD Mongo Collections. Direct access to the collection is NOT supported via the MeteorClient, but is instead managed via the MongoCollection struct type [(see below)](#mongocollection).
 
 ### Initialization & Connecting to Meteor
 
@@ -45,6 +45,21 @@ to stop a subscription (unsubscribe) call
     
     myClient.remove(subscriptionId: subId)
     
+
+### CRUDing Collections
+
+MeteorClient provides direct access to the low level insert / update / remove collection operations if they have't been forbidden on the server side, however it is better to access these directly through MongoCollection structs [see Collections below](#mongocollection-crud-operations)).
+
+### Calling Meteor Methods
+
+Calling methods on the Meteor server is simple. A single method is provided:
+
+
+    call(method:, parameters: [], responseCallback: ? ) -> String?
+
+
+Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The method returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
+
 
 ### Logon
 
@@ -79,25 +94,11 @@ In both of the above cases, either the username or email (not both) can be ommit
 
 *NOTE: In general creating a new account does NOT automatically logon to that account, instead, upon success the client should call one of the logon methods described above.*
 
-### CRUDing Collections
+### Collection Decoder
 
-MeteorClient provides direct access to the low level insert / update / remove collection operations if they have't been forbidden on the server side, however it is better to access these directly through MongoCollection structs (see Collections below).
+MeteorSwift defines the CollectionDecoder protocol which requires that a object implements the MeteorDecoder and MeteorEncoder methods. These methods are passed a JSONDecoder / JSONEncoder and in order to decode/encode the object to / from EJSON. If your object also conforms to Swift's Codable then the decode / encode is trivial.
 
-### Calling Meteor Methods
-
-Calling methods on the Meteor server is simple. A single method is provided:
-
-    
-    call(method:, parameters: [], responseCallback: ? ) -> String?
-    
-
-Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The method returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
-
-### CollectionDecoder
-
-MeteorSwift defines the CollectionDecoder protocol which requires that an object implements the MeteorDecoder and MeteorEncoder methods. These methods are passed a JSONDecoder or JSONEncoder and are expected to decode/encode the object. To / from EJSON. If your objects also conform to Swift's Codable then the decode / encode is trivial.
-
-For example, with a simple object in a theorietical messaging app,
+For example, with a simple object in a theoretical messaging app,
 
 
     struct Message : Codable, CollectionDecoder {
@@ -107,7 +108,7 @@ For example, with a simple object in a theorietical messaging app,
     }
 
 
-*Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type (described below).*
+*Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type [(described below)](#ejsondate).*
 
 conforming to CollectionDecoder is as follows:
 
@@ -126,11 +127,20 @@ conforming to CollectionDecoder is as follows:
     }
 
 
-You can inform the MeteorClient that a particular collection supports encodign and decoding to a specific type by registering the CollectionDecoder for that collection and type as follows:
+You can inform the MeteorClient that a particular collection supports encoding and decoding to a specific type by registering the CollectionDecoder for that collection and type as follows:
 
     myClient.registerCodable("collection_name", collectionCoder: MyCollectionType.Type)
 
-However, this is done automatically when you create a MongoCollection object (see below). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
+However, this is done automatically when you create a MongoCollection object [(see below)](#collection-decoder). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
+
+## Change Notification
+
+It is possible to register for change notifications on a specific collection, MeteorSwift create notification names that include the action (added, removed, etc) and will post a notification through notification center whenever these actions occur. You can listen for any or all of the following.
+
+To listen for a specific action (added, removed etc) on a specific collection, register for a notification on `collectionName_action`, to be notified of any change to a specific collection, register for a notification on `collectionName`, and to be notified of a specific action (for example all "added" events on any collection), register for a notification of `action`.
+
+Note, this can cause a lot of notifications, so use this with care. A better approach is to register a watcher (via [MongoCollection](#watching-collections)) which will greatly reduce the the notifications that are being sent.
+
 
 ## EJSON
 
@@ -138,23 +148,23 @@ MeteorSwift provides EJSON extension structs that comply to Codable for both EJS
 
 ### EJSONDate
 
-Includes methods to retrieve the date and ms value of the EJSON encoded date as well as an initializer that takes a Date value. 
+Includes methods to retrieve the date and ms value of the EJSON encoded date as well as an initializer that takes a Swift Date() value. 
 
 ### EJSONData
 
-Includes methods to retrieve the encoded data as a Data() value. 
+Includes methods to retrieve the encoded data as a Swift Data() value. 
 
 ## MongoCollection
 
-MongoCollection  provides a bridge between the MeteorClient and the Collections of data it manages. The Mongo Client provides collection-level "insert", "update", "remove" methods as well as "find" and "findOne" equivalents. MongoCollection also provides a way to register a "watcher" that will call you if selected objects in a collection are changed.
+MongoCollection  provides a bridge between the MeteorClient and the Collections of data it manages. The MongoCollection provides collection-level "insert", "update", "remove" methods as well as "find" and "findOne" equivalents. It also provides a way to register a "watcher" that will call you if specific objects in a collection are changed.
 
-MongoCollections employ generics to infer the expected type of the object in the collection, and of the type conforms to the CollectionDecoder protocol, it is automatically registered with MeteorClient.
+MongoCollection employs generics to infer the expected type of the object in the collection. If the type conforms to the CollectionDecoder protocol [(see above)](#collection-decoder), it is automatically registered with MeteorClient.
 
-You create a Mongo collection collection by providing the instance of Meteor it is going to connect to, and the name of the collection as follows:
+You create a MongoCollection by providing the instance of Meteor it is going to connect to, and the name of the collection as follows:
 
     messages    = MongoCollection<Message>(meteor: meteor, collection: "MessageCollection")
 
-### CRUD operations
+### MongoCollection CRUD operations
 
 MongoCollection implements the following CRUD operations
         
