@@ -95,24 +95,16 @@
 				DC9F199620FF65EF002B9714 /* MeteorClient.swift */,
 				DC9F199220FF65EF002B9714 /* MongoCollection.swift */,
 				DC9F199420FF65EF002B9714 /* EJSON.swift */,
-				DC9F1A2021001C84002B9714 /* Implementation */,
-				DC9F199720FF65EF002B9714 /* DependencyProvider.swift */,
-				DC9F198A20FF6583002B9714 /* MeteorSwift.h */,
-				DC9F198B20FF6583002B9714 /* Info.plist */,
-			);
-			path = MeteorSwift;
-			sourceTree = "<group>";
-		};
-		DC9F1A2021001C84002B9714 /* Implementation */ = {
-			isa = PBXGroup;
-			children = (
 				DC9F199320FF65EF002B9714 /* SwiftDDP.swift */,
 				DC9F1A1C2100077F002B9714 /* MeteorDDPDelegate.swift */,
 				DC9F1A1E210007B8002B9714 /* MeteorAccounts.swift */,
 				DC9F199820FF65EF002B9714 /* MeteorClientParsing.swift */,
 				DC9F199520FF65EF002B9714 /* OrderedDictionary.swift */,
+				DC9F199720FF65EF002B9714 /* DependencyProvider.swift */,
+				DC9F198A20FF6583002B9714 /* MeteorSwift.h */,
+				DC9F198B20FF6583002B9714 /* Info.plist */,
 			);
-			path = Implementation;
+			path = MeteorSwift;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
