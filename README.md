@@ -15,7 +15,7 @@ MeteorSwift provides a small number of key classes and a number of typealiases t
 
 ## MeteorClient
 
-This class provides the client side implementation for a Meteor implementation.  This includes methods to logon, signin, manage subscriptions, make method calls and CRUD Mongo Collections. Direct access to the collection is NOT supported via the MeteorClient, but is instead managed via the MongoCollection struct type [(see below)](#mongocollection).
+This class provides the client side implementation for a Meteor implementation.  This includes functions to logon, signin, manage subscriptions, make function calls and CRUD Mongo Collections. Direct access to the collection is NOT supported via the MeteorClient, but is instead managed via the [MongoCollection (see below)](#mongocollection).
 
 ### Initialization & Connecting to Meteor
 
@@ -56,13 +56,13 @@ MeteorClient provides direct access to the low level insert / update / remove co
 
 ### Calling Meteor Methods
 
-Calling methods on the Meteor server is simple. A single method is provided:
+Calling methods on the Meteor server is simple. A single function is provided:
 
 ```swift    
 call(method:, parameters: [], responseCallback: ? ) -> String?
 ```
 
-Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The method returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
+Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The function returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
 
 
 ### Logon
@@ -88,7 +88,7 @@ logon(withOAuthAccessToken:, serviceName:, optionsKey:, responseCallback: ?)
 
 ### SignUp
 
-There are a two methods available for creating an new account. They are:
+There are a two functions available for creating an new account. They are:
 
 ```swift    
 signup(withUsername:, email:, password:, fullname:, responseCallback: ?)
@@ -97,11 +97,11 @@ signup(withUsername:, email:, password:, firstName:, lastName:, responseCallback
 
 In both of the above cases, either the username or email (not both) can be ommitted, and the name will accept and empty string.
 
-*NOTE: In general creating a new account does NOT automatically logon to that account, instead, upon success the client should call one of the logon methods described above.*
+*NOTE: In general creating a new account does NOT automatically logon to that account, instead, upon success the client should call one of the logon functions described above.*
 
 ### Collection Decoder
 
-MeteorSwift defines the CollectionDecoder protocol which requires that a object implements the MeteorDecoder and MeteorEncoder methods. These methods are passed a JSONDecoder / JSONEncoder and in order to decode/encode the object to / from EJSON. If your object also conforms to Swift's Codable then the decode / encode is trivial.
+MeteorSwift defines the CollectionDecoder protocol which requires that a object implements decode and encode functions. These functions are passed a JSONDecoder / JSONEncoder and in order to decode/encode the object to / from EJSON. If your object also conforms to Swift's Codable then the decode / encode is trivial.
 
 For example, with a simple object in a theoretical messaging app,
 
@@ -118,27 +118,38 @@ struct Message : Codable, CollectionDecoder {
 conforming to CollectionDecoder is as follows:
 
 ```swift    
-extension Message: CollectionDecoder { 
-    static let decode: MeteorDecoder = {
-        return try $1.decode(Message.self, from: $0)
+extension Message: CollectionDecoder {
+    
+    static func decode(data: Data, decoder: JSONDecoder) throws -> Any? {
+        return try decoder.decode(Message.self, from: data)
     }
     
-    static let encode: MeteorEncoder = {
-        if let message = $0 as? Message {
-            return try $1.encode(message)
+    static func encode(value: Any, encoder: JSONEncoder) throws -> Data? {
+        if let message = value as? Message {
+            return try encoder.encode(message)
         }
         return nil
     }
 }
 ```
 
-You can inform the MeteorClient that a particular collection supports encoding and decoding to a specific type by registering the CollectionDecoder for that collection and type as follows:
+You can add additional functionality to either of these functions to perform custom actions, for example, an Image object might extract a the encoded image and create an image from it ready for use as follows:
+
+```swift
+static func decode(data: Data, decoder: JSONDecoder) throws -> Any? {
+    var result = try decoder.decode(Image.self, from: data) as Image
+    result.image = result.decodeImage()
+    return result
+}
+```
+
+You inform the MeteorClient that a particular collection supports encoding and decoding to a specific type by registering the CollectionDecoder for that collection and type as follows:
 
 ```swift    
     myClient.registerCodable("collection_name", collectionCoder: MyCollectionType.Type)
 ```
 
-However, this is done automatically when you create a MongoCollection object [(see below)](#collection-decoder). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
+However, this is done automatically when you create a [MongoCollection object (see below)](#collection-decoder). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
 
 ## Change Notification
 
@@ -155,15 +166,15 @@ MeteorSwift provides EJSON extension structs that comply to Codable for both EJS
 
 ### EJSONDate
 
-Includes methods to retrieve the date and ms value of the EJSON encoded date as well as an initializer that takes a Swift Date() value. 
+Includes functions to retrieve the date and ms value of the EJSON encoded date as well as an initializer that takes a Swift Date() value. 
 
 ### EJSONData
 
-Includes methods to retrieve the encoded data as a Swift Data() value. 
+Includes functions to retrieve the encoded data as a Swift Data() value. 
 
 ## MongoCollection
 
-MongoCollection  provides a bridge between the MeteorClient and the Collections of data it manages. The MongoCollection provides collection-level "insert", "update", "remove" methods as well as "find" and "findOne" equivalents. It also provides a way to register a "watcher" that will call you if specific objects in a collection are changed.
+MongoCollection struct provides a bridge between the MeteorClient and the Collections of data it manages. The MongoCollection provides collection-level "insert", "update", "remove" functions as well as "find" and "findOne" equivalents. It also provides a way to register a "watcher" that will call you if specific objects in a collection are changed.
 
 MongoCollection employs generics to infer the expected type of the object in the collection. If the type conforms to the CollectionDecoder protocol [(see above)](#collection-decoder), it is automatically registered with MeteorClient.
 
@@ -185,13 +196,13 @@ MongoCollection implements the following CRUD operations
 
 These pretty much do what they imply.  The first inserts a new object into the collection, automatically encoding it to EJSON before sending. The third remove an object from the collection with the matching _id, and middle one updates an object.
 
-The update method is the only one that requires an EJSON object, and that object should have NSNull set for any fields that are being cleared. It does not update the local instance of the object, instead waiting for the server to resend the updated record as a change. Both insert and delete do make local changes accordinly. 
+The update function is the only one that requires an EJSON object, and that object should have NSNull set for any fields that are being cleared. It does not update the local instance of the object, instead waiting for the server to resend the updated record as a change. Both insert and delete do make local changes accordinly. 
 
 ### Find and findOne
 
-MongoCollection implements a find method that takes two closures, *matching* and *sorted* both of which are optional. The *matching* closure is take a single element from the collection and returns a Bool if the element should be included. This essentially filters the available records. The *sorted* closure takes two elements and returns true if the first element is greater (should be sorted after) the second. Passing nil for *matching* returns all elements, and passing nil for *sorted* returns the records in the same order as they were published.
+MongoCollection implements a find function that takes two closures, *matching* and *sorted* both of which are optional. The *matching* closure is take a single element from the collection and returns a Bool if the element should be included. This essentially filters the available records. The *sorted* closure takes two elements and returns true if the first element is greater (should be sorted after) the second. Passing nil for *matching* returns all elements, and passing nil for *sorted* returns the records in the same order as they were published.
 
-The findOne method takes the same parameters and returns the first element of the equivalent find (or nil).
+The findOne function takes the same parameters and returns the first element of the equivalent find (or nil).
 
 For example, to find the most recent record in the Messages collection, the following would work
  
@@ -203,7 +214,7 @@ For example, to find the most recent record in the Messages collection, the foll
 
 ### Watching Collections
 
-MongoCollection allows you to register one or more watchers that monitor a collection for changes, each of these watchers accepts an optional *matching* closure that functions the same as with the find methods  describe above. If a record passing the *matching* closure is chaged, then the (non optional) callback method is called with the reason for the change (inserted, insertedBefore, moved, removed, or updated), the record _id and the record itself. If the record was removed, then a copy of the record that was removed is provided.
+MongoCollection allows you to register one or more watchers that monitor a collection for changes, each of these watchers accepts an optional *matching* closure that functions the same as with the find functions  describe above. If a record passing the *matching* closure is chaged, then the (non optional) callback closure is called with the reason for the change (inserted, insertedBefore, moved, removed, or updated), the record _id and the record itself. If the record was removed, then a copy of the record that was removed is provided.
 
 As an example the following watches for any change to the messages collection:
 
