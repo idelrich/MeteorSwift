@@ -55,17 +55,6 @@ public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
 /// Subscription callback, called when a subscription is ready
 public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
 
-/// CollectionDecoder
-///
-/// Allows the client to register Swift types that comply to the Codable
-/// protocol and also implent the encode and decode helper methods to convert
-/// EJSON objects into structures or classes. If provided the collections
-/// managed by Meteor will contain concrete types rather than JSONObjects.
-public protocol CollectionDecoder {
-    static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
-    static func encode(value: Any, encoder: JSONEncoder) throws -> Data?
-}
-
 /// Convenience type, a Meteor Collection is an ordered
 /// dictionary of ids / data pairs.
 typealias MeteorCollection  = OrderedDictionary<String, Any>
@@ -153,7 +142,7 @@ public class MeteorClient: NSObject {
     /// - Returns: The _id of the new object (or nil on a failure)
     @discardableResult
     public func insert(into collectionName: String, object: Any, responseCallback: MeteorClientMethodCallback? = nil) -> String? {
-        if var insert = convertToEJSON(collection: collectionName, object: object) {
+        if var insert = ddp?.convertToEJSON(object: object) {
             //
             // Check if there is an an ID, if not create one.
             var _id = insert["_id"] as? String
@@ -270,6 +259,16 @@ public class MeteorClient: NSObject {
         subscriptions.removeValue(forKey: uid)
         _subscriptionCallback.removeValue(forKey: uid)
     }
+    ///
+    /// Get current userId (if logged in)
+    public var currentUserId : String? {
+        return userId
+    }
+    ///
+    /// Get current session token (if logged in)
+    public var currentSessionToken : String? {
+        return sessionToken
+    }   
     var okToSend:Bool {
         get {
             return connected
@@ -455,28 +454,6 @@ public class MeteorClient: NSObject {
         }
         ddp?.method(withId: methodId, method:methodName, parameters:parameters)
         return methodId
-    }
-    func convertToEJSON(collection name:String, object: Any) -> EJSONObject? {
-        if let collectionCoder = codables[name] {
-            do {
-                if let data = try collectionCoder.encode(value: object, encoder: jsonEncoder) {
-                    //
-                    // Merge changes into the original object.
-                    let encoded = try JSONSerialization.jsonObject(with: data, options: [])
-                    if let result = encoded as? EJSONObject {
-                        return result
-                    } else {
-                        print("MeteorSwift: Encoded element in \(name) is not EJSONObject")
-                    }
-                }
-            } catch {
-                print("MeteorSwift: Failed to encode element in \(name) - reported error \(error.localizedDescription)")
-            }
-        }
-        if let result = object as? EJSONObject {
-            return result
-        }
-        return nil
     }
 
     func resetBackoff() {

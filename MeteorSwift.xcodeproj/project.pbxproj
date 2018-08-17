@@ -18,6 +18,7 @@
 		DC9F199F20FF65EF002B9714 /* MeteorClientParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F199820FF65EF002B9714 /* MeteorClientParsing.swift */; };
 		DC9F1A1D2100077F002B9714 /* MeteorDDPDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F1A1C2100077F002B9714 /* MeteorDDPDelegate.swift */; };
 		DC9F1A1F210007B8002B9714 /* MeteorAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F1A1E210007B8002B9714 /* MeteorAccounts.swift */; };
+		DCFCC98021269AB000499A2A /* CollectionDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCFCC97F21269AB000499A2A /* CollectionDecoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		DC9F1A1920FFBE58002B9714 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DC9F1A1C2100077F002B9714 /* MeteorDDPDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeteorDDPDelegate.swift; sourceTree = "<group>"; };
 		DC9F1A1E210007B8002B9714 /* MeteorAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeteorAccounts.swift; sourceTree = "<group>"; };
+		DCFCC97F21269AB000499A2A /* CollectionDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDecoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				DC9F199620FF65EF002B9714 /* MeteorClient.swift */,
+				DCFCC97F21269AB000499A2A /* CollectionDecoder.swift */,
 				DC9F199220FF65EF002B9714 /* MongoCollection.swift */,
 				DC9F199420FF65EF002B9714 /* EJSON.swift */,
 				DC9F199320FF65EF002B9714 /* SwiftDDP.swift */,
@@ -208,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCFCC98021269AB000499A2A /* CollectionDecoder.swift in Sources */,
 				DC9F199A20FF65EF002B9714 /* SwiftDDP.swift in Sources */,
 				DC9F1A1D2100077F002B9714 /* MeteorDDPDelegate.swift in Sources */,
 				DC9F199C20FF65EF002B9714 /* OrderedDictionary.swift in Sources */,

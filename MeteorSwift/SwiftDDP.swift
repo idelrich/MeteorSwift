@@ -101,13 +101,47 @@ class SwiftDDP: NSObject {
 
     var url:String { get { return urlString } }
     var socketState:SRReadyState { get { return webSocket?.readyState ?? SRReadyState.CLOSED } }
+
+    public func convertToEJSON(object: Any) -> EJSONObject? {
+        let jsonEncoder = JSONEncoder()
+        do {
+            let encodable = object as! CollectionDecoder
+            if let data = try encodable.encode(encoder: jsonEncoder) {
+                //
+                // Merge changes into the original object.
+                let encoded = try JSONSerialization.jsonObject(with: data, options: [])
+                if let result = encoded as? EJSONObject {
+                    return result
+                } else {
+                    print("MeteorSwift: Encoded \(object) is not EJSONObject")
+                }
+            }
+        } catch {
+            print("MeteorSwift: Failed to encode \(object) - reported error \(error.localizedDescription)")
+        }
+        if let result = object as? EJSONObject {
+            return result
+        }
+        return nil
+    }
 }
 
 extension SwiftDDP { // MARK - Internal
     func buildJSON(withFields: EJSONObject, parameters: [Any]?) -> String                            {
         var dict = withFields
         if let parameters = parameters {
-            dict["params"] = parameters
+            //
+            // Go through the parameters and try to encode any that we can.            
+            var encodedParams = [Any]()
+            for param in parameters {
+                if let encoded = convertToEJSON(object: param) {
+                    encodedParams.append(encoded)
+                } else {
+                    encodedParams.append(param)
+                }
+            }
+            
+            dict["params"] = encodedParams
         }
         if let data = try? JSONSerialization.data(withJSONObject: dict, options: [])    {
             return String(data: data, encoding: .utf8) ?? ""

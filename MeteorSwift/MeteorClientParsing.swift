@@ -175,7 +175,8 @@ extension MeteorClient { // Parsing
             //
             // This collection is codable, convert it.
             do {
-                if let data = try collectionCoder.encode(value: collection[_id]!, encoder: jsonEncoder) {
+                let encodable = collection[_id]! as! CollectionDecoder
+                if let data = try encodable.encode(encoder: jsonEncoder) {
                     //
                     // Merge changes into the original object.
                     let json = try? JSONSerialization.jsonObject(with: data, options: [])

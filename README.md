@@ -64,6 +64,8 @@ call(method:, parameters: [], responseCallback: ? ) -> String?
 
 Pass in the method name and any required parametes (these must already be in an EJSON compatible format). The function returns a methodId which can be use to monitor for a response notification, or (preferable) pass in a response callback to get the result information from the server.
 
+Note: Any objects that conform to Collection Decoder [see below](#collection-decoder), are automatically converted to EJSON dictionaries before being passed to the meteor method call.
+
 
 ### Logon
 
@@ -115,25 +117,20 @@ struct Message : Codable, CollectionDecoder {
 
 *Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type [(described below)](#ejsondate).*
 
-conforming to CollectionDecoder is as follows:
+conforming to CollectionDecoder is automatically handled by a protocol extension:
 
 ```swift    
-extension Message: CollectionDecoder {
-    
+public extension CollectionDecoder where Self : Codable {
     static func decode(data: Data, decoder: JSONDecoder) throws -> Any? {
-        return try decoder.decode(Message.self, from: data)
+        return try decoder.decode(Self.self, from: data)
     }
-    
-    static func encode(value: Any, encoder: JSONEncoder) throws -> Data? {
-        if let message = value as? Message {
-            return try encoder.encode(message)
-        }
-        return nil
+    func encode(encoder: JSONEncoder) throws -> Data? {
+        return try encoder.encode(self)
     }
 }
 ```
 
-You can add additional functionality to either of these functions to perform custom actions, for example, an Image object might extract a the encoded image and create an image from it ready for use as follows:
+You can add additional functionality to either of these functions to perform custom actions, by implementing them yourselves. For example, an Image object might extract a the encoded image and create an image from it ready for use as follows:
 
 ```swift
 static func decode(data: Data, decoder: JSONDecoder) throws -> Any? {
