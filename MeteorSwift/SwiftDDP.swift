@@ -24,6 +24,8 @@ class SwiftDDP: NSObject {
     fileprivate var delegate    : SwiftDDPDelegate?
     fileprivate var webSocket   : SRWebSocket?
 
+    fileprivate let jsonEncoder = JSONEncoder()
+    
     init(withURLString: String, delegate: SwiftDDPDelegate?)                                            {
         self.urlString  = withURLString
         self.delegate   = delegate
@@ -102,18 +104,18 @@ class SwiftDDP: NSObject {
     var url:String { get { return urlString } }
     var socketState:SRReadyState { get { return webSocket?.readyState ?? SRReadyState.CLOSED } }
 
-    public func convertToEJSON(object: Any) -> EJSONObject? {
-        let jsonEncoder = JSONEncoder()
+    func convertToEJSON(object: Any) -> EJSONObject? {
         do {
-            let encodable = object as! CollectionDecoder
-            if let data = try encodable.encode(encoder: jsonEncoder) {
-                //
-                // Merge changes into the original object.
-                let encoded = try JSONSerialization.jsonObject(with: data, options: [])
-                if let result = encoded as? EJSONObject {
-                    return result
-                } else {
-                    print("MeteorSwift: Encoded \(object) is not EJSONObject")
+            if let encodable = object as? CollectionDecoder {
+                if let data = try encodable.encode(encoder: jsonEncoder) {
+                    //
+                    // Merge changes into the original object.
+                    let encoded = try JSONSerialization.jsonObject(with: data, options: [])
+                    if let result = encoded as? EJSONObject {
+                        return result
+                    } else {
+                        print("MeteorSwift: Encoded \(object) is not EJSONObject")
+                    }
                 }
             }
         } catch {
@@ -128,7 +130,7 @@ class SwiftDDP: NSObject {
 
 extension SwiftDDP { // MARK - Internal
     func buildJSON(withFields: EJSONObject, parameters: [Any]?) -> String                            {
-        var dict = withFields
+        var params = withFields
         if let parameters = parameters {
             //
             // Go through the parameters and try to encode any that we can.            
@@ -141,9 +143,9 @@ extension SwiftDDP { // MARK - Internal
                 }
             }
             
-            dict["params"] = encodedParams
+            params["params"] = encodedParams
         }
-        if let data = try? JSONSerialization.data(withJSONObject: dict, options: [])    {
+        if let data = try? JSONSerialization.data(withJSONObject: params, options: [])    {
             return String(data: data, encoding: .utf8) ?? ""
         }
         return ""

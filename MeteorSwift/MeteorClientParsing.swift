@@ -170,51 +170,40 @@ extension MeteorClient { // Parsing
         let collectionName = message["collection"] as! String
         
         var collection = collections[collectionName, default: MeteorCollection()]
-
-        if let collectionCoder = codables[collectionName] {
+        
+        //
+        // This collection is codable, convert it.
+        if var json = ddp!.convertToEJSON(object: collection[_id]!) {
             //
-            // This collection is codable, convert it.
-            do {
-                let encodable = collection[_id]! as! CollectionDecoder
-                if let data = try encodable.encode(encoder: jsonEncoder) {
-                    //
-                    // Merge changes into the original object.
-                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
-                    if var json = json as? EJSONObject {
-                        //
-                        // <json> is now the current version of the onject.
-                        //
-                        // Apply the updates
-                        if let changes = message["fields"] as? EJSONObject {
-                            for (key, value) in changes {
-                                json[key] = value
-                            }
-                        }
-                        if let cleared = message["cleared"] as? [String] {
-                            for key in cleared {
-                                json.removeValue(forKey:key)
-                            }
-                        }
-                        //
-                        // And now decode it back to the original obkect type
-                        do {
-                            if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
-                                if let result = try collectionCoder.decode(data: data, decoder: jsonDecoder) {
-                                    collection[_id] = result
-                                    collections[collectionName] = collection
-                                    return (_id, result)
-                                }
-                            }
-                        } catch {
-                            print("MeteorSwift: Failed to update element in \(collectionName) - reported error \(error.localizedDescription)")
-                            print("MeteorSwift: Raw Data \(json)")
+            // <json> is now the current version of the onject.
+            //
+            // Apply the updates
+            if let changes = message["fields"] as? EJSONObject {
+                for (key, value) in changes {
+                    json[key] = value
+                }
+            }
+            if let cleared = message["cleared"] as? [String] {
+                for key in cleared {
+                    json.removeValue(forKey:key)
+                }
+            }
+            //
+            // And now decode it back to the original obkect type
+            if let collectionCoder = codables[collectionName] {
+                
+                do {
+                    if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
+                        if let result = try collectionCoder.decode(data: data, decoder: jsonDecoder) {
+                            collection[_id] = result
+                            collections[collectionName] = collection
                         }
                     }
+                } catch {
+                    print("MeteorSwift: Failed to update element in \(collectionName) - reported error \(error.localizedDescription)")
+                    print("MeteorSwift: Raw Data \(json)")
                 }
-            } catch {
-                print("MeteorSwift: Failed to encode element in \(collectionName) - reported error \(error.localizedDescription)")
-            }
-            
+            }           
             return (_id, collection[_id]!)
         } else {
             var (_id, value) = mongoObject(with: message)

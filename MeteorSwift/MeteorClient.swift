@@ -71,7 +71,6 @@ public class MeteorClient: NSObject {
     var ddp                         : SwiftDDP?
     
     let jsonDecoder                 = JSONDecoder()
-    let jsonEncoder                 = JSONEncoder()
 
     var collections                 = [String: MeteorCollection]()
     var subscriptions               = [String: String]()
@@ -150,7 +149,7 @@ public class MeteorClient: NSObject {
                 _id = NSUUID().uuidString
                 insert["_id"] = _id
             }
-            call(method: "/\(collectionName)/insert", parameters: [insert], responseCallback: responseCallback)
+            call(method: "/\(collectionName)/insert", parameters: [object], responseCallback: responseCallback)
             
             var collection = collections[collectionName, default: MeteorCollection()]
             collection.add(object, for: _id!)
