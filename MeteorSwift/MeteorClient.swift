@@ -12,6 +12,14 @@ public extension Notification {
     static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
     static let MeteorClientDidConnect       = Notification.Name("sorr.swiftddp.connected")
     static let MeteorClientDidDisconnect    = Notification.Name("sorr.swiftddp.disconnected")
+    static let MeteorClientUpdateSession    = Notification.Name("sorr.swiftddp.disconnected")
+}
+
+protocol MeteorClientDelegate {
+    func meteorDidConnect()
+    func meteorDidDisconnect()
+    func meteorClientReady()
+    func meteorClientUpdateSession(userId: String, sessionToken: String)
 }
 
 /// Possible Errors from the Meteor Client
@@ -83,6 +91,8 @@ public class MeteorClient: NSObject {
     var _supportedVersions          : [String]
 
     var authDelegate                : DDPAuthDelegate?
+    var delegate                    : MeteorClientDelegate?
+    
     var userId                      : String?
     var sessionToken                : String?
     var websocketReady              = false
@@ -278,21 +288,9 @@ public class MeteorClient: NSObject {
     /// - Parameters:
     ///   - token: A pre-existing session token
     ///   - responseCallback: A callback with the results of loggin in.
-    public func logon(with token: String, responseCallback: MeteorClientMethodCallback?) {
-        // tokenExpires.$date : expiry date
+    public func logon(with token: String, responseCallback: MeteorClientMethodCallback? = nil) {
         sessionToken = token
-        setAuthStateToLoggingIn()
-        call(method: "login", parameters: ["resume", sessionToken!]) {
-            if let error = $1 {
-                self.setAuthStatetoLoggedOut()
-                self.authDelegate?.authenticationFailed(withError: error)
-                
-            } else if let result = $0?["result"] as? EJSONObject {
-                self.setAuthStateToLoggedIn(userId: result["id"] as! String, withToken: result["token"] as! String)
-                self.authDelegate?.authenticationWasSuccessful()
-            }
-            responseCallback?($0, $1)
-        }
+        logon(withUserParameters: ["resume": sessionToken!], responseCallback: responseCallback)
     }
     /// Login to Meteor Client with a user name and password.
     ///
@@ -438,7 +436,7 @@ public class MeteorClient: NSObject {
         ddp?.method(withId: DDPIdGenerator.nextId, method: "logout", parameters:nil)
         setAuthStatetoLoggedOut()
     }
-    @objc func reconnect() {
+    func reconnect() {
         guard let ddp = ddp, ddp.socketNotOpen else {
             return
         }
@@ -462,6 +460,7 @@ public class MeteorClient: NSObject {
         websocketReady = false
         connected = false
         invalidateUnresolvedMethods()
+        delegate?.meteorDidDisconnect()
         NotificationCenter.default.post(name: Notification.MeteorClientDidDisconnect, object:self)
         if _disconnecting {
             _disconnecting = false
@@ -473,7 +472,9 @@ public class MeteorClient: NSObject {
         if (_tries != _maxRetryIncrement) {
             _tries += 1
         }
-        perform(#selector(reconnect), with:self, afterDelay:timeInterval)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + timeInterval) {
+            self.reconnect()
+        }
     }
     func invalidateUnresolvedMethods() {
         for methodId in _methodIds {

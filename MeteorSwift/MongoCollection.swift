@@ -180,7 +180,7 @@ class MeteorWatcher<T>: NSObject {
 
     @objc func onChange(message: NSNotification) {
         let reason = ChangedReason(rawValue: message.userInfo!["msg"] as! String) ?? .added
-        let _id = message.userInfo!["msg"] as! String
+        let _id = message.userInfo!["_id"] as! String
         
         for (_, (matching, callback)) in watchList {
             guard reason != .removed else {

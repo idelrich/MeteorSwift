@@ -2,10 +2,10 @@
 
 MeteorSwift is a swift (and swifty) re-implementaion of [Objective-DDP](https://github.com/boundsj/ObjectiveDDP), that also takes advantage of Swift closures, codable types and some other Swift magic.
 
-This document current to version 0.0.2
+This document current to version tag 0.0.9
 
 ## Installation 
-Install via CocoaPods:
+Install via CocoaPods: (not yet supported)
 
 ```ruby    
 pod 'MeteorSwift'
@@ -26,12 +26,24 @@ let myClient = MeteorClient('wss://app.mysecuresite.com/websocket')
 myClient.connect()
 ```
 
-The MeteorClient uses notifications to broadcase changes in the connection, specifically
+The MeteorClient uses two approaches to inform the client about changes in the  in the connection, specifically, you can register a delegate object with the client  that implements the the following protocol:
+
+```swift
+protocol MeteorClientDelegate {
+    func meteorDidConnect()
+    func meteorDidDisconnect()
+    func meteorClientReady()
+    func meteorClientUpdateSession(userId: String, sessionToken: String)
+}
+```
+alternately, if your application needs to catch track these events more generically, notifucations are also posted to the default NotificationCenter for the app. Register for and listen for the following messages. 
+
 
 ```swift    
 MeteorClientDidConnect
 MeteorClientConnectionReady
 MeteorClientDidDisconnect
+MeteorClientUpdateSession
 ```
 
 messages. You should register with NotificationCenter before calling connect in order to be informed of these events.
