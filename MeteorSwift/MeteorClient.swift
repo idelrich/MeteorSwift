@@ -15,7 +15,7 @@ public extension Notification {
     static let MeteorClientUpdateSession    = Notification.Name("sorr.swiftddp.disconnected")
 }
 
-protocol MeteorClientDelegate {
+public protocol MeteorConnectionDelegate {
     func meteorDidConnect()
     func meteorDidDisconnect()
     func meteorClientReady()
@@ -91,7 +91,7 @@ public class MeteorClient: NSObject {
     var _supportedVersions          : [String]
 
     var authDelegate                : DDPAuthDelegate?
-    var delegate                    : MeteorClientDelegate?
+    var delegate                    : MeteorConnectionDelegate?
     
     var userId                      : String?
     var sessionToken                : String?

@@ -29,7 +29,7 @@ myClient.connect()
 The MeteorClient uses two approaches to inform the client about changes in the  in the connection, specifically, you can register a delegate object with the client  that implements the the following protocol:
 
 ```swift
-protocol MeteorClientDelegate {
+protocol MeteorConnectionDelegate {
     func meteorDidConnect()
     func meteorDidDisconnect()
     func meteorClientReady()
