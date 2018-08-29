@@ -14,9 +14,9 @@ extension MeteorClient { // Parsing
             let callback = _responseCallbacks[messageId]
             var response: [String:Any]?
             if let errorDesc = message["error"] as? EJSONObject {
-                let userInfo = [NSLocalizedDescriptionKey: errorDesc["message"] as! String]
-                let responseError = NSError(domain: errorDesc["errorType"] as! String,
-                                            code: errorDesc["error"] as! Int,
+                let userInfo = [NSLocalizedDescriptionKey: errorDesc["message"] as? String ?? "Missing Error Message"]
+                let responseError = NSError(domain: errorDesc["errorType"] as? String ?? "Method Error",
+                                            code: errorDesc["error"] as? Int ?? -1,
                                             userInfo:userInfo)
                 callback?(nil, responseError)
                 response = ["error": responseError]

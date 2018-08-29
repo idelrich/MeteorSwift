@@ -73,7 +73,7 @@ extension MeteorClient { // Accounts
         userId = id
         sessionToken = withToken
         NotificationCenter.default.post(name: Notification.MeteorClientUpdateSession, object:self)
-        delegate?.meteorClientUpdateSession(userId: id, sessionToken: withToken)
+        connectionDelegate?.meteorClientUpdateSession(userId: id, sessionToken: withToken)
     }
     func setAuthStatetoLoggedOut() {
         authState = .AuthStateLoggedOut

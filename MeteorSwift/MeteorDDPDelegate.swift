@@ -39,7 +39,7 @@ extension MeteorClient : SwiftDDPDelegate {
             if let sessionToken = sessionToken { //TODO check expiry date
                 logon(with: sessionToken, responseCallback: nil)
             }
-            delegate?.meteorClientReady()
+            connectionDelegate?.meteorClientReady()
             NotificationCenter.default.post(name: Notification.MeteorClientConnectionReady, object:self)
             makeMeteorDataSubscriptions()
         case "ready":
@@ -79,7 +79,7 @@ extension MeteorClient : SwiftDDPDelegate {
         resetBackoff()
         resetCollections()
         ddp?.connect(withSession: nil, version: ddpVersion, support: _supportedVersions)
-        delegate?.meteorDidConnect()
+        connectionDelegate?.meteorDidConnect()
         NotificationCenter.default.post(name: Notification.MeteorClientDidConnect, object: self)
     }
     func didReceive(connectionError: Error) {

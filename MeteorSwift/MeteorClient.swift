@@ -90,8 +90,8 @@ public class MeteorClient: NSObject {
     var _tries                      = MeteorClientRetryIncreaseBy
     var _supportedVersions          : [String]
 
-    var authDelegate                : DDPAuthDelegate?
-    var delegate                    : MeteorConnectionDelegate?
+    public var authDelegate         : DDPAuthDelegate?
+    public var connectionDelegate   : MeteorConnectionDelegate?
     
     var userId                      : String?
     var sessionToken                : String?
@@ -460,7 +460,7 @@ public class MeteorClient: NSObject {
         websocketReady = false
         connected = false
         invalidateUnresolvedMethods()
-        delegate?.meteorDidDisconnect()
+        connectionDelegate?.meteorDidDisconnect()
         NotificationCenter.default.post(name: Notification.MeteorClientDidDisconnect, object:self)
         if _disconnecting {
             _disconnecting = false
