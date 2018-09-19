@@ -31,6 +31,10 @@ public enum ChangedReason: String {
     case changed
 }
 
+public protocol MongoObject {
+    var _id: String { get set }
+}
+
 /// MongoCollection
 ///
 /// Provides similar functionality to Mongo objects in native Meteor including
@@ -64,6 +68,20 @@ public struct MongoCollection<T> {
     /// - Returns: _id iof newly inserted object (or nil)
     public func insert(_ object: T, responseCallback: MeteorClientMethodCallback? = nil) -> String? {
         return meteor.insert(into: name, object: object, responseCallback: responseCallback)
+    }
+    /// Inserts a value (typically taken from local store) into the
+    /// collection without waiting for it to come from the server or sending it
+    /// to the server.
+    ///
+    /// - Parameters:
+    ///     item:
+    @discardableResult
+    public func add(item: T) -> Bool {
+        if let _id = mongoId(for: item) {
+            meteor.add(item: item, forId: _id, into: name)
+            return true
+        }
+        return false
     }
     /// Update an object in the collection
     ///
@@ -115,6 +133,34 @@ public struct MongoCollection<T> {
     public func findOne(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> T? {
         return find(matching: matching, sorted: sorted).first
     }
+    /// Find the record in this collection with a Mongo _id matching the passed in
+    /// value.
+    ///
+    /// - Parameters:
+    ///   - _ _id: The Mongo _id string of the object to match (if present).
+    /// - Returns: The item in the collection with matching id (if any)
+    public func findOne(_ _id: String) -> T? {
+        return findOne(matching: { self.mongoId(for: $0) == _id})
+    }
+    ///
+    /// Returns the mongoId for an object. If the object conforms to MongoObject then
+    /// this returns the _id field, otherwise if this object is an EJSONObject, then the
+    /// return value is the value for the "_id" key, otherwise nil is returned.
+    ///
+    /// - Parameters:
+    ///      item: The object to extract the MongoId from
+    private func mongoId(for item: T) -> String? {
+        var _id: String?
+        if let obj = item as? MongoObject {
+            _id = obj._id
+        } else if let obj = item as? EJSONObject {
+            _id = obj["_id"] as? String
+        }
+        if _id == nil {
+            print("MongoCollectoion: Couldn't find _id for item: \(item)")
+        }
+        return _id
+    }
     /// Establishes a "watch" on changes to this collection.
     ///
     /// - Parameters:
@@ -123,6 +169,15 @@ public struct MongoCollection<T> {
     /// - Returns: A String id that must be used to stop watching this collection (see stopWatching)
     public func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
         return watcher.watch(matching: matching, callback: callback)
+    }
+    /// Establishes a "watch" on changes to an object in this collection with a specific _id.
+    ///
+    /// - Parameters:
+    ///   - _ _id: A String with the Meteor objectId (_id) to establish a watch for.
+    ///   - callback: A callback that provides information about any changes to records in the collection
+    /// - Returns: A String id that must be used to stop watching this collection (see stopWatching)
+    public func watch(_ _id: String, callback: @escaping CollectionCallback<T>) -> String {
+        return watcher.watch(matching: { self.mongoId(for: $0) == _id}, callback: callback)
     }
     /// Stops a previously established "watch" on changes to this collection
     ///
@@ -167,7 +222,6 @@ class MeteorWatcher<T>: NSObject {
         watchList.removeAll()
         removeObservers()
     }
-
     private func addObservers() {
         //
         // Get all notifications for changes to this collection

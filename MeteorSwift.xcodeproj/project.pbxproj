@@ -95,8 +95,8 @@
 			isa = PBXGroup;
 			children = (
 				DC9F199620FF65EF002B9714 /* MeteorClient.swift */,
-				DCFCC97F21269AB000499A2A /* CollectionDecoder.swift */,
 				DC9F199220FF65EF002B9714 /* MongoCollection.swift */,
+				DCFCC97F21269AB000499A2A /* CollectionDecoder.swift */,
 				DC9F199420FF65EF002B9714 /* EJSON.swift */,
 				DC9F199320FF65EF002B9714 /* SwiftDDP.swift */,
 				DC9F1A1C2100077F002B9714 /* MeteorDDPDelegate.swift */,

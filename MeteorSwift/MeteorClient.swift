@@ -118,6 +118,8 @@ public class MeteorClient: NSObject {
         super.init()
         ddp = SwiftDDP.init(withURLString: site, delegate: self)
     }
+    /// Return true if the server is currently connected.
+    public var isConnected          : Bool { return connected }
     /// Connect to the Meteor client
     public func connect() {
         ddp?.connectWebSocket()
@@ -169,6 +171,18 @@ public class MeteorClient: NSObject {
         }
         return nil
     }
+    /// Inserts a value (typically taken from local store) into the
+    /// collection with the specified id without waiting for it to come from Meteor.
+    ///
+    /// - Parameters:
+    ///     item:   Any, should be the same type as the collection is holding.
+    ///     withId: String, the mongoID of the item to insert.
+    public func add(item: Any, forId _id: String, into collectionName: String) {
+        var collection = collections[collectionName] ?? MeteorCollection()
+        collection.add(item, for: _id)
+        collections[collectionName] = collection
+    }
+ 
     /// Provides low level update support for a collection, fields
     /// set to NSNull will be cleared from the object, all other
     /// fields will be set.

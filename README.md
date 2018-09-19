@@ -121,15 +121,15 @@ For example, with a simple object in a theoretical messaging app,
 
 ```swift    
 struct Message : Codable, CollectionDecoder {
-    let _id     : String
-    let body    : String
-    let time    : EJSONDate
+    var _id     : String
+    var body    : String
+    var time    : EJSONDate
 }
 ```
 
 *Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type [(described below)](#ejsondate).*
 
-conforming to CollectionDecoder is automatically handled by a protocol extension:
+conforming to CollectionDecoder for Codable objects is automatically handled by a protocol extension:
 
 ```swift    
 public extension CollectionDecoder where Self : Codable {
@@ -142,7 +142,7 @@ public extension CollectionDecoder where Self : Codable {
 }
 ```
 
-You can add additional functionality to either of these functions to perform custom actions, by implementing them yourselves. For example, an Image object might extract a the encoded image and create an image from it ready for use as follows:
+You can add additional functionality to either of these functions to perform custom actions, by implementing them yourself. For example, an Image object might extract a the encoded image and create an image from it ready for use as follows:
 
 ```swift
 static func decode(data: Data, decoder: JSONDecoder) throws -> Any? {
@@ -211,7 +211,7 @@ The update function is the only one that requires an EJSON object, and that obje
 
 MongoCollection implements a find function that takes two closures, *matching* and *sorted* both of which are optional. The *matching* closure is take a single element from the collection and returns a Bool if the element should be included. This essentially filters the available records. The *sorted* closure takes two elements and returns true if the first element is greater (should be sorted after) the second. Passing nil for *matching* returns all elements, and passing nil for *sorted* returns the records in the same order as they were published.
 
-The findOne function takes the same parameters and returns the first element of the equivalent find (or nil).
+The findOne function takes the same parameters and returns the first element of the equivalent find (or nil). 
 
 For example, to find the most recent record in the Messages collection, the following would work
  
@@ -220,6 +220,20 @@ For example, to find the most recent record in the Messages collection, the foll
         return first.date.ms < two.date.ms 
     }
 ```
+
+A varient of the findOne function takes as its only parameter, a String which is the MongoId string you wish to match, in this case your objects must either be in EJSON format, or adopt the MongoObject protocol which provides access to the _id field. For example, the following is possible:
+
+```swift    
+   // Note: "Message" already conforms to MongoObject as it has an _id member which 
+   // is a String. Just need to declare conformance.
+   extension Message : MongoObject {}  
+
+   guard let result = messages.findOne(aMessageId) else { return }
+   
+   // <result> is an optional containing the message object with matching _id field.
+```
+
+If you want to support offline access to data, it can be useful to insert objects into a collection that did not come from a subscription, these may have been locally persisted (in Core Data, or some other archiving approach) but need to be in the collection. For this the mongoCollection supports the *add(item:)* function which injects items directly into the collection. To use this function the object you are inserting should either conform to MongoObject protocol or be an EJSON Object with an _id key / valuer pair. The MeteorClient supports a more direct version of this method that takes and object, _id and the name of the collection to insert into. 
 
 ### Watching Collections
 
@@ -234,6 +248,7 @@ let watchId = messages.watch(matching: nil, callback: (reason, _id, message) in 
     }
 }
 ```    
+As with findOne, the watch function also has a convenience version that takes a Mongo id string and a callback and sets up a watch for that the object in the collection with a matching _id. This requires that objects in the collection are EJSON or adopt the MongoObject protocol.
 
 ## MeteorClient Types & Protocols
 
