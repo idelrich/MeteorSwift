@@ -33,10 +33,10 @@ public struct EJSONData: Codable {
 }
 
 public extension Date { // (EJSON Date)
-    public var bson:[String: Double] { return ["$date": timeIntervalSince1970*1000.0] }
+    var bson:[String: Double] { return ["$date": timeIntervalSince1970*1000.0] }
 }
 
 public extension Data { // (EJSON Data)
-    public var bson:[String: String] { return ["$binary": base64EncodedString(options: [])] }
+    var bson:[String: String] { return ["$binary": base64EncodedString(options: [])] }
 }
 

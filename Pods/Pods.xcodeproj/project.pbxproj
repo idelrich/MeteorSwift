@@ -3,292 +3,292 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0BC2F501BE7FEAB27ACC73E9070D08A8 /* SocketRocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A0FC02CA892D1D306E026FADD36CB0D /* SocketRocket-dummy.m */; };
-		19056741DC67F24A1570B14E32EAB903 /* SocketRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 6426D40030E0B75169C1889D0D9D0D57 /* SocketRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24C1919A1FA3787727C6C591417A0953 /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 865460EE9E065C29BDBD091BDE233B3A /* SRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E0C2E821DB9A5ED6F7BF994BC5D7FE9 /* Pods-MeteorSwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15144EE059DDCC59E7DA9B021F0A6FF1 /* Pods-MeteorSwift-dummy.m */; };
-		460CD29620DAF7B56977FCC0AF161B72 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72F7491339287D7D3438E6159922765F /* Foundation.framework */; };
-		4AE6E1D655923A587FC8D09595103C36 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39770DC6DBE27972833FB0C495A7D6E9 /* Security.framework */; };
-		4C679D367AE80724D451ED7742EF6F80 /* SCrypto-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4672131307B68E8CD856D954D69ED4B0 /* SCrypto-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1E78ACFC25B12C5D882BE44E123EF2F /* SCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F063C26105FF12FF9CDCA84432C551A /* SCrypto.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B118E50B8EE101AF49C0FA59AD3FBCB0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA33308FF5FDB30BB1276B7FC275CBD3 /* CFNetwork.framework */; };
-		BC94A650EEFE737BE3A2C58C2021E27A /* SocketRocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DEC9480B1AA35B0321004445D1154070 /* SocketRocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BD3D5E5F4471F3DD8E5BDB5BB72E80CC /* SCrypto-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A15C25341A7B8DCADF4DE41A9D01D948 /* SCrypto-dummy.m */; };
-		CD24EE76DF2EF1223730AE545BAF07AD /* SCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1246A7CDC3AEF2B1AE6C5A8475558EB1 /* SCrypto.swift */; };
-		D6BC60A1B2DA0773FA426B9B9B849C80 /* Pods-MeteorSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E32C5DA84B965B0FCAA02947E554285A /* Pods-MeteorSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DCDA6D5AAE70DA2AC43032130ACDF347 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72F7491339287D7D3438E6159922765F /* Foundation.framework */; };
-		E57AF3E9A1BD415CB562BEC00E0DB5FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72F7491339287D7D3438E6159922765F /* Foundation.framework */; };
-		FD2688C7E678F9823F96C026320FA93D /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 75850BFE9FD7BD1FDBECCFDD70872AB4 /* SRWebSocket.m */; };
+		00505B998E9BC43AC52A8BBD6048F1A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4401E344D9B0F5E42514B0E41E08FDCC /* Foundation.framework */; };
+		0262BABC0143C8B5884F22B0F9E725FC /* SocketRocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2497311506F7E26AD0F68AB6E298E2AF /* SocketRocket-dummy.m */; };
+		13B8BD1E9B45374FE369C5B714B779CB /* SocketRocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F848688F226C1D0CFFF41776B318842 /* SocketRocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		140854CE93EFFA854B0324AEDD16AB3C /* SCrypto-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6E016C88389B43779EC873FA745AA2 /* SCrypto-dummy.m */; };
+		256329F602B9FCB5878EF9DDE0CE4343 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4401E344D9B0F5E42514B0E41E08FDCC /* Foundation.framework */; };
+		3D83A119946DAC9265C475F5DF9A8C20 /* SocketRocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 92723A7FF11312EBE0740A766D33269C /* SocketRocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7106F4FCAB4C9D55B118F7FDCF080C04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4401E344D9B0F5E42514B0E41E08FDCC /* Foundation.framework */; };
+		81CA0BB335B288C51C628A01CB4A39E4 /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F70C0E40C08E37EE8346C6C084A8DC62 /* SRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		93F211060A19B2AEF0B72DAB0F0DA83B /* SCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330750B0819AC358DA8888E70ECD8D6F /* SCrypto.swift */; };
+		A75A2494CC799EDB0956EEB69B904343 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57010B1F532490AE7D967B1BFB0B76D1 /* Security.framework */; };
+		B7E0855319981D5D8FDC828D1D51F09D /* Pods-MeteorSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A465148E360B711FF42970BF6958AD9 /* Pods-MeteorSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C2A5A81C60ABAA0B2D8D3EF7E7553398 /* Pods-MeteorSwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E40714D1053B5C324C4F4C52E97BD238 /* Pods-MeteorSwift-dummy.m */; };
+		CC926191F3F8D331B5CFAC79E5740856 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 815430286AFFC45301C0E850DA5CDBEC /* SRWebSocket.m */; };
+		D028F9F7106CF6E9B5960EB69290E86D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A4FAF7439CFFE61363555A8BE62C017 /* CFNetwork.framework */; };
+		D3FAAB0B95D279E90F27E79D69B3972F /* SCrypto-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 394B5F79BB551FB1A16335A6F2B9F77E /* SCrypto-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9E763A8584A2E6B2B72BD86055D7961 /* SCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 84173F199180CCBA64D72DBCF86E20F6 /* SCrypto.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		263FFEB75E3A5F95EDB5E92E59ED1FF2 /* PBXContainerItemProxy */ = {
+		1E4BF988404F6C9DFADC737BD807F5E4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = B091B105A435664AD844B99B42E0D9CD;
+			remoteGlobalIDString = E5AEB680B3E2418AF8E54BA80FA04375;
 			remoteInfo = SocketRocket;
 		};
-		85AAA028707ADA40C1FEAEE8E60C9E75 /* PBXContainerItemProxy */ = {
+		2569E800E6870EBF02CC55983AD11B96 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8A4BD74F8796839162FA5FA704CD9B0F;
+			remoteGlobalIDString = 5CA6F73CDCBE2A383BBE428B4D49F9EF;
 			remoteInfo = SCrypto;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00588B631DD97EC3C9006C2486F6AE11 /* Pods-MeteorSwift-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-MeteorSwift-resources.sh"; sourceTree = "<group>"; };
-		02295876C465615C37781458236F6E37 /* SCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		036B23B65AD9677CB53CCDA14C265414 /* Pods-MeteorSwift-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MeteorSwift-acknowledgements.plist"; sourceTree = "<group>"; };
-		1246A7CDC3AEF2B1AE6C5A8475558EB1 /* SCrypto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SCrypto.swift; path = Source/SCrypto.swift; sourceTree = "<group>"; };
-		15144EE059DDCC59E7DA9B021F0A6FF1 /* Pods-MeteorSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MeteorSwift-dummy.m"; sourceTree = "<group>"; };
-		16BB68DFE1618CFBA890981DD35AE9CD /* Pods_MeteorSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MeteorSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		28F5BAAF2F368D30214C8BF7257D7D31 /* SocketRocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-prefix.pch"; sourceTree = "<group>"; };
-		2A64A00E67BA45E15A97215B91185C93 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2C2F4E6FD1F7C042161510E79597A552 /* SCrypto-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SCrypto-prefix.pch"; sourceTree = "<group>"; };
-		39770DC6DBE27972833FB0C495A7D6E9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
-		4672131307B68E8CD856D954D69ED4B0 /* SCrypto-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SCrypto-umbrella.h"; sourceTree = "<group>"; };
-		4F063C26105FF12FF9CDCA84432C551A /* SCrypto.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCrypto.h; path = Source/SCrypto.h; sourceTree = "<group>"; };
-		5746222EF4CCA96C80D7C0A1DF7E225B /* SCrypto.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SCrypto.modulemap; sourceTree = "<group>"; };
-		6426D40030E0B75169C1889D0D9D0D57 /* SocketRocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SocketRocket.h; path = SocketRocket/SocketRocket.h; sourceTree = "<group>"; };
-		6A7DFA95C7F1E8EF8CECD1C68151F5B8 /* SocketRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7222474D052DE1A6C74C833C451069AF /* SCrypto.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SCrypto.xcconfig; sourceTree = "<group>"; };
-		72F7491339287D7D3438E6159922765F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		75850BFE9FD7BD1FDBECCFDD70872AB4 /* SRWebSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SRWebSocket.m; path = SocketRocket/SRWebSocket.m; sourceTree = "<group>"; };
-		80C525797C97CB73815AB674B3F06D90 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		865460EE9E065C29BDBD091BDE233B3A /* SRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SRWebSocket.h; path = SocketRocket/SRWebSocket.h; sourceTree = "<group>"; };
-		8A0FC02CA892D1D306E026FADD36CB0D /* SocketRocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SocketRocket-dummy.m"; sourceTree = "<group>"; };
-		8ECA415ED84173FE4F6079B31F2D44AF /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		979DE875B32F95C4BD8E02B2CE78B38C /* Pods-MeteorSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MeteorSwift.debug.xcconfig"; sourceTree = "<group>"; };
-		A15C25341A7B8DCADF4DE41A9D01D948 /* SCrypto-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SCrypto-dummy.m"; sourceTree = "<group>"; };
-		A27C248DA7FEDCDC031DFD55C2B4F717 /* Pods-MeteorSwift-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MeteorSwift-acknowledgements.markdown"; sourceTree = "<group>"; };
-		A3105EED9DEEC9B0BF2FDF04EBDFE384 /* SocketRocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SocketRocket.xcconfig; sourceTree = "<group>"; };
-		BE01E99F24962A607BCA25AFBCAE0D21 /* SocketRocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SocketRocket.modulemap; sourceTree = "<group>"; };
-		CA33308FF5FDB30BB1276B7FC275CBD3 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		D7074732FB28F14B822D039585AA6F57 /* Pods-MeteorSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MeteorSwift.release.xcconfig"; sourceTree = "<group>"; };
-		DEC9480B1AA35B0321004445D1154070 /* SocketRocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-umbrella.h"; sourceTree = "<group>"; };
-		E32C5DA84B965B0FCAA02947E554285A /* Pods-MeteorSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MeteorSwift-umbrella.h"; sourceTree = "<group>"; };
-		E91F8D4504F05AD7B9E261DFA4D037D7 /* Pods-MeteorSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MeteorSwift.modulemap"; sourceTree = "<group>"; };
+		02E66105B5F2F2A4D4EE069A10244294 /* Pods-MeteorSwift-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MeteorSwift-acknowledgements.plist"; sourceTree = "<group>"; };
+		0F2A7DB1ED45AAEBF7B41A38659ECECF /* Pods-MeteorSwift-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MeteorSwift-Info.plist"; sourceTree = "<group>"; };
+		1A4FAF7439CFFE61363555A8BE62C017 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		2497311506F7E26AD0F68AB6E298E2AF /* SocketRocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SocketRocket-dummy.m"; sourceTree = "<group>"; };
+		28FCD4807A2CFEBD1D54DDFF00BDDA08 /* SCrypto-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SCrypto-Info.plist"; sourceTree = "<group>"; };
+		330750B0819AC358DA8888E70ECD8D6F /* SCrypto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SCrypto.swift; path = Source/SCrypto.swift; sourceTree = "<group>"; };
+		34DC5EE0762104E4FB99AA6E31C9168C /* SocketRocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-prefix.pch"; sourceTree = "<group>"; };
+		394B5F79BB551FB1A16335A6F2B9F77E /* SCrypto-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SCrypto-umbrella.h"; sourceTree = "<group>"; };
+		3F848688F226C1D0CFFF41776B318842 /* SocketRocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-umbrella.h"; sourceTree = "<group>"; };
+		4401E344D9B0F5E42514B0E41E08FDCC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		452A005348CA65C1D962686518097676 /* Pods-MeteorSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MeteorSwift.modulemap"; sourceTree = "<group>"; };
+		4B742C2CB02FB7678391465F502D3005 /* SocketRocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SocketRocket.modulemap; sourceTree = "<group>"; };
+		57010B1F532490AE7D967B1BFB0B76D1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		5A465148E360B711FF42970BF6958AD9 /* Pods-MeteorSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MeteorSwift-umbrella.h"; sourceTree = "<group>"; };
+		78CF4D3AB9C987D54B8D222950B44629 /* SCrypto.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SCrypto.xcconfig; sourceTree = "<group>"; };
+		7F6E016C88389B43779EC873FA745AA2 /* SCrypto-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SCrypto-dummy.m"; sourceTree = "<group>"; };
+		815430286AFFC45301C0E850DA5CDBEC /* SRWebSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SRWebSocket.m; path = SocketRocket/SRWebSocket.m; sourceTree = "<group>"; };
+		84173F199180CCBA64D72DBCF86E20F6 /* SCrypto.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCrypto.h; path = Source/SCrypto.h; sourceTree = "<group>"; };
+		92723A7FF11312EBE0740A766D33269C /* SocketRocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SocketRocket.h; path = SocketRocket/SocketRocket.h; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AB614C153E6C6B4A556771D93185C6BD /* Pods-MeteorSwift-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MeteorSwift-acknowledgements.markdown"; sourceTree = "<group>"; };
+		C296E435F8DD7EB7595B5618F9FEF449 /* Pods_MeteorSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MeteorSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3B83F23EFF278D2684DC79FD05A793A /* SocketRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C40A2649772701EE85F7D7CB4DC2664F /* Pods-MeteorSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MeteorSwift.release.xcconfig"; sourceTree = "<group>"; };
+		C4667E7402957F013D0F70B87A88A792 /* SCrypto-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SCrypto-prefix.pch"; sourceTree = "<group>"; };
+		CE9253C1B8A1B5FB0F2C0C87593C5367 /* SocketRocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SocketRocket.xcconfig; sourceTree = "<group>"; };
+		DCC233FBA50444288967CF6527E0C4BE /* Pods-MeteorSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MeteorSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		E40714D1053B5C324C4F4C52E97BD238 /* Pods-MeteorSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MeteorSwift-dummy.m"; sourceTree = "<group>"; };
+		EE83E745DED7762329079D28A682A550 /* SCrypto.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SCrypto.modulemap; sourceTree = "<group>"; };
+		F56EED23A7BBF32866B1B4D52AB1E6DD /* SCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F70C0E40C08E37EE8346C6C084A8DC62 /* SRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SRWebSocket.h; path = SocketRocket/SRWebSocket.h; sourceTree = "<group>"; };
+		FB3C314D915A69FDABB0D0DA88471683 /* SocketRocket-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SocketRocket-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3F004ED1E9A2F2C709C33B6EC9573035 /* Frameworks */ = {
+		9B0AE2198D4B8292EF656C27F4FE4A32 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				460CD29620DAF7B56977FCC0AF161B72 /* Foundation.framework in Frameworks */,
+				00505B998E9BC43AC52A8BBD6048F1A5 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B9DC5E78AAA618AAABCA396635E329D8 /* Frameworks */ = {
+		A2FF8C70B794D5825B589848FDE196D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCDA6D5AAE70DA2AC43032130ACDF347 /* Foundation.framework in Frameworks */,
+				256329F602B9FCB5878EF9DDE0CE4343 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C07D85B89C85D173AC55E81D54C3C90F /* Frameworks */ = {
+		EDE6CBB429826F5992AA31F8972B908E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B118E50B8EE101AF49C0FA59AD3FBCB0 /* CFNetwork.framework in Frameworks */,
-				E57AF3E9A1BD415CB562BEC00E0DB5FF /* Foundation.framework in Frameworks */,
-				4AE6E1D655923A587FC8D09595103C36 /* Security.framework in Frameworks */,
+				D028F9F7106CF6E9B5960EB69290E86D /* CFNetwork.framework in Frameworks */,
+				7106F4FCAB4C9D55B118F7FDCF080C04 /* Foundation.framework in Frameworks */,
+				A75A2494CC799EDB0956EEB69B904343 /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		06A0E0341757149232048AFDAB4FC6D7 /* Pods-MeteorSwift */ = {
+		03C5C200A0787E300053CFA8F53CA094 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				80C525797C97CB73815AB674B3F06D90 /* Info.plist */,
-				E91F8D4504F05AD7B9E261DFA4D037D7 /* Pods-MeteorSwift.modulemap */,
-				A27C248DA7FEDCDC031DFD55C2B4F717 /* Pods-MeteorSwift-acknowledgements.markdown */,
-				036B23B65AD9677CB53CCDA14C265414 /* Pods-MeteorSwift-acknowledgements.plist */,
-				15144EE059DDCC59E7DA9B021F0A6FF1 /* Pods-MeteorSwift-dummy.m */,
-				00588B631DD97EC3C9006C2486F6AE11 /* Pods-MeteorSwift-resources.sh */,
-				E32C5DA84B965B0FCAA02947E554285A /* Pods-MeteorSwift-umbrella.h */,
-				979DE875B32F95C4BD8E02B2CE78B38C /* Pods-MeteorSwift.debug.xcconfig */,
-				D7074732FB28F14B822D039585AA6F57 /* Pods-MeteorSwift.release.xcconfig */,
-			);
-			name = "Pods-MeteorSwift";
-			path = "Target Support Files/Pods-MeteorSwift";
-			sourceTree = "<group>";
-		};
-		122DA2E5084A4393C29BE363C764795C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				EC341550D48545A0334F9085B7D07071 /* iOS */,
+				B1F9A3C8223CA8EC4500BCA7100DE71E /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		51CC284C8F3DF158DBB53EC475F85F9C /* Products */ = {
+		0B80D0FA5452FEA0ECBFD8793F97BB72 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				16BB68DFE1618CFBA890981DD35AE9CD /* Pods_MeteorSwift.framework */,
-				02295876C465615C37781458236F6E37 /* SCrypto.framework */,
-				6A7DFA95C7F1E8EF8CECD1C68151F5B8 /* SocketRocket.framework */,
+				C296E435F8DD7EB7595B5618F9FEF449 /* Pods_MeteorSwift.framework */,
+				F56EED23A7BBF32866B1B4D52AB1E6DD /* SCrypto.framework */,
+				C3B83F23EFF278D2684DC79FD05A793A /* SocketRocket.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7DB346D0F39D3F0E887471402A8071AB = {
+		0DFD1CF6C48868CA0F2E7FE32B744A1C /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
-				122DA2E5084A4393C29BE363C764795C /* Frameworks */,
-				89FE4D1C9BC5A9EE78452E2D2FA44FA0 /* Pods */,
-				51CC284C8F3DF158DBB53EC475F85F9C /* Products */,
-				A5F2CB33DE6D12168C2A7E3171622B9C /* Targets Support Files */,
-			);
-			sourceTree = "<group>";
-		};
-		89FE4D1C9BC5A9EE78452E2D2FA44FA0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				DD3B25E0127F18AB03B2801763A72392 /* SCrypto */,
-				C36FDC21C69C8EF9F043ED849FB3824F /* SocketRocket */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		A5F2CB33DE6D12168C2A7E3171622B9C /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				06A0E0341757149232048AFDAB4FC6D7 /* Pods-MeteorSwift */,
-			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		C36FDC21C69C8EF9F043ED849FB3824F /* SocketRocket */ = {
-			isa = PBXGroup;
-			children = (
-				6426D40030E0B75169C1889D0D9D0D57 /* SocketRocket.h */,
-				865460EE9E065C29BDBD091BDE233B3A /* SRWebSocket.h */,
-				75850BFE9FD7BD1FDBECCFDD70872AB4 /* SRWebSocket.m */,
-				C45E18A61447881A93D294B97751C151 /* Support Files */,
-			);
-			path = SocketRocket;
-			sourceTree = "<group>";
-		};
-		C45E18A61447881A93D294B97751C151 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				8ECA415ED84173FE4F6079B31F2D44AF /* Info.plist */,
-				BE01E99F24962A607BCA25AFBCAE0D21 /* SocketRocket.modulemap */,
-				A3105EED9DEEC9B0BF2FDF04EBDFE384 /* SocketRocket.xcconfig */,
-				8A0FC02CA892D1D306E026FADD36CB0D /* SocketRocket-dummy.m */,
-				28F5BAAF2F368D30214C8BF7257D7D31 /* SocketRocket-prefix.pch */,
-				DEC9480B1AA35B0321004445D1154070 /* SocketRocket-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/SocketRocket";
-			sourceTree = "<group>";
-		};
-		D07E300C87F5856949EEA36D4B2EE21F /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				2A64A00E67BA45E15A97215B91185C93 /* Info.plist */,
-				5746222EF4CCA96C80D7C0A1DF7E225B /* SCrypto.modulemap */,
-				7222474D052DE1A6C74C833C451069AF /* SCrypto.xcconfig */,
-				A15C25341A7B8DCADF4DE41A9D01D948 /* SCrypto-dummy.m */,
-				2C2F4E6FD1F7C042161510E79597A552 /* SCrypto-prefix.pch */,
-				4672131307B68E8CD856D954D69ED4B0 /* SCrypto-umbrella.h */,
+				EE83E745DED7762329079D28A682A550 /* SCrypto.modulemap */,
+				78CF4D3AB9C987D54B8D222950B44629 /* SCrypto.xcconfig */,
+				7F6E016C88389B43779EC873FA745AA2 /* SCrypto-dummy.m */,
+				28FCD4807A2CFEBD1D54DDFF00BDDA08 /* SCrypto-Info.plist */,
+				C4667E7402957F013D0F70B87A88A792 /* SCrypto-prefix.pch */,
+				394B5F79BB551FB1A16335A6F2B9F77E /* SCrypto-umbrella.h */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/SCrypto";
 			sourceTree = "<group>";
 		};
-		DD3B25E0127F18AB03B2801763A72392 /* SCrypto */ = {
+		1D05293B803A4C2C66CFECB9F13B05EF /* SocketRocket */ = {
 			isa = PBXGroup;
 			children = (
-				4F063C26105FF12FF9CDCA84432C551A /* SCrypto.h */,
-				1246A7CDC3AEF2B1AE6C5A8475558EB1 /* SCrypto.swift */,
-				D07E300C87F5856949EEA36D4B2EE21F /* Support Files */,
+				92723A7FF11312EBE0740A766D33269C /* SocketRocket.h */,
+				F70C0E40C08E37EE8346C6C084A8DC62 /* SRWebSocket.h */,
+				815430286AFFC45301C0E850DA5CDBEC /* SRWebSocket.m */,
+				AB706E9C49A22DDC013B39835AC7B3C7 /* Support Files */,
+			);
+			path = SocketRocket;
+			sourceTree = "<group>";
+		};
+		2F1302BD43CFAC18FC41F92A8F4F6537 /* SCrypto */ = {
+			isa = PBXGroup;
+			children = (
+				84173F199180CCBA64D72DBCF86E20F6 /* SCrypto.h */,
+				330750B0819AC358DA8888E70ECD8D6F /* SCrypto.swift */,
+				0DFD1CF6C48868CA0F2E7FE32B744A1C /* Support Files */,
 			);
 			path = SCrypto;
 			sourceTree = "<group>";
 		};
-		EC341550D48545A0334F9085B7D07071 /* iOS */ = {
+		4E69D335096C316611D4C0667AFD5465 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CA33308FF5FDB30BB1276B7FC275CBD3 /* CFNetwork.framework */,
-				72F7491339287D7D3438E6159922765F /* Foundation.framework */,
-				39770DC6DBE27972833FB0C495A7D6E9 /* Security.framework */,
+				2F1302BD43CFAC18FC41F92A8F4F6537 /* SCrypto */,
+				1D05293B803A4C2C66CFECB9F13B05EF /* SocketRocket */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A78421C962A56054D5BCE33EE721AD86 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C75CD217AEA862C24D8BFADA1185FB59 /* Pods-MeteorSwift */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		AB706E9C49A22DDC013B39835AC7B3C7 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				4B742C2CB02FB7678391465F502D3005 /* SocketRocket.modulemap */,
+				CE9253C1B8A1B5FB0F2C0C87593C5367 /* SocketRocket.xcconfig */,
+				2497311506F7E26AD0F68AB6E298E2AF /* SocketRocket-dummy.m */,
+				FB3C314D915A69FDABB0D0DA88471683 /* SocketRocket-Info.plist */,
+				34DC5EE0762104E4FB99AA6E31C9168C /* SocketRocket-prefix.pch */,
+				3F848688F226C1D0CFFF41776B318842 /* SocketRocket-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SocketRocket";
+			sourceTree = "<group>";
+		};
+		B1F9A3C8223CA8EC4500BCA7100DE71E /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				1A4FAF7439CFFE61363555A8BE62C017 /* CFNetwork.framework */,
+				4401E344D9B0F5E42514B0E41E08FDCC /* Foundation.framework */,
+				57010B1F532490AE7D967B1BFB0B76D1 /* Security.framework */,
 			);
 			name = iOS;
+			sourceTree = "<group>";
+		};
+		C75CD217AEA862C24D8BFADA1185FB59 /* Pods-MeteorSwift */ = {
+			isa = PBXGroup;
+			children = (
+				452A005348CA65C1D962686518097676 /* Pods-MeteorSwift.modulemap */,
+				AB614C153E6C6B4A556771D93185C6BD /* Pods-MeteorSwift-acknowledgements.markdown */,
+				02E66105B5F2F2A4D4EE069A10244294 /* Pods-MeteorSwift-acknowledgements.plist */,
+				E40714D1053B5C324C4F4C52E97BD238 /* Pods-MeteorSwift-dummy.m */,
+				0F2A7DB1ED45AAEBF7B41A38659ECECF /* Pods-MeteorSwift-Info.plist */,
+				5A465148E360B711FF42970BF6958AD9 /* Pods-MeteorSwift-umbrella.h */,
+				DCC233FBA50444288967CF6527E0C4BE /* Pods-MeteorSwift.debug.xcconfig */,
+				C40A2649772701EE85F7D7CB4DC2664F /* Pods-MeteorSwift.release.xcconfig */,
+			);
+			name = "Pods-MeteorSwift";
+			path = "Target Support Files/Pods-MeteorSwift";
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				03C5C200A0787E300053CFA8F53CA094 /* Frameworks */,
+				4E69D335096C316611D4C0667AFD5465 /* Pods */,
+				0B80D0FA5452FEA0ECBFD8793F97BB72 /* Products */,
+				A78421C962A56054D5BCE33EE721AD86 /* Targets Support Files */,
+			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		34FF26BDCBFD0CAD3950388B00C51A5C /* Headers */ = {
+		08FA4D6264B68BD389D4EF2830911B76 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC94A650EEFE737BE3A2C58C2021E27A /* SocketRocket-umbrella.h in Headers */,
-				19056741DC67F24A1570B14E32EAB903 /* SocketRocket.h in Headers */,
-				24C1919A1FA3787727C6C591417A0953 /* SRWebSocket.h in Headers */,
+				13B8BD1E9B45374FE369C5B714B779CB /* SocketRocket-umbrella.h in Headers */,
+				3D83A119946DAC9265C475F5DF9A8C20 /* SocketRocket.h in Headers */,
+				81CA0BB335B288C51C628A01CB4A39E4 /* SRWebSocket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8B083E83811E1F6CD36EA907E11C2135 /* Headers */ = {
+		C9DF0FFC234F650910F05A0D5C15C219 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C679D367AE80724D451ED7742EF6F80 /* SCrypto-umbrella.h in Headers */,
-				A1E78ACFC25B12C5D882BE44E123EF2F /* SCrypto.h in Headers */,
+				D3FAAB0B95D279E90F27E79D69B3972F /* SCrypto-umbrella.h in Headers */,
+				F9E763A8584A2E6B2B72BD86055D7961 /* SCrypto.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F0E6AD5414E90A46AB1016501C9B956E /* Headers */ = {
+		E1BF5F8BC354C2A24807A88DCB0EEDE6 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6BC60A1B2DA0773FA426B9B9B849C80 /* Pods-MeteorSwift-umbrella.h in Headers */,
+				B7E0855319981D5D8FDC828D1D51F09D /* Pods-MeteorSwift-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		6D64070AF49F967141D24314D1688726 /* Pods-MeteorSwift */ = {
+		06C546FE5D6C5323229D0B493AC2AE14 /* Pods-MeteorSwift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8955EBD9343E5C388100264456C7366C /* Build configuration list for PBXNativeTarget "Pods-MeteorSwift" */;
+			buildConfigurationList = D95AF41CE112CFDC674353D38A9FDF71 /* Build configuration list for PBXNativeTarget "Pods-MeteorSwift" */;
 			buildPhases = (
-				D1D4B52BEAFA053D9E248F2F4B27AD99 /* Sources */,
-				3F004ED1E9A2F2C709C33B6EC9573035 /* Frameworks */,
-				F0E6AD5414E90A46AB1016501C9B956E /* Headers */,
+				E1BF5F8BC354C2A24807A88DCB0EEDE6 /* Headers */,
+				72D652A2E0CD3D0DBC3401BEF379D4D5 /* Sources */,
+				A2FF8C70B794D5825B589848FDE196D9 /* Frameworks */,
+				B2DC02F21E8E9BB9AB4FF4BA006A79C2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				66C2462B4711546D7AA102249E4F8A42 /* PBXTargetDependency */,
-				913F9FF5A88A3CB47E41B5F31BC73C58 /* PBXTargetDependency */,
+				5C6949842B0F49E35885694216E981C9 /* PBXTargetDependency */,
+				8CE97FA2F743A37FB963662020F33EC5 /* PBXTargetDependency */,
 			);
 			name = "Pods-MeteorSwift";
 			productName = "Pods-MeteorSwift";
-			productReference = 16BB68DFE1618CFBA890981DD35AE9CD /* Pods_MeteorSwift.framework */;
+			productReference = C296E435F8DD7EB7595B5618F9FEF449 /* Pods_MeteorSwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8A4BD74F8796839162FA5FA704CD9B0F /* SCrypto */ = {
+		5CA6F73CDCBE2A383BBE428B4D49F9EF /* SCrypto */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A50DFD644247B84DDF36FAB10325723F /* Build configuration list for PBXNativeTarget "SCrypto" */;
+			buildConfigurationList = 852DD8A7F838F0516921FAB9A411DED1 /* Build configuration list for PBXNativeTarget "SCrypto" */;
 			buildPhases = (
-				21BA76D5E443455C8F677DD2000DF472 /* Sources */,
-				B9DC5E78AAA618AAABCA396635E329D8 /* Frameworks */,
-				8B083E83811E1F6CD36EA907E11C2135 /* Headers */,
+				C9DF0FFC234F650910F05A0D5C15C219 /* Headers */,
+				58F6E6297422284DDABB4EE4C255F9D8 /* Sources */,
+				9B0AE2198D4B8292EF656C27F4FE4A32 /* Frameworks */,
+				C34E89000775F3B992B3D57F82E08B4F /* Resources */,
 			);
 			buildRules = (
 			);
@@ -296,16 +296,17 @@
 			);
 			name = SCrypto;
 			productName = SCrypto;
-			productReference = 02295876C465615C37781458236F6E37 /* SCrypto.framework */;
+			productReference = F56EED23A7BBF32866B1B4D52AB1E6DD /* SCrypto.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		B091B105A435664AD844B99B42E0D9CD /* SocketRocket */ = {
+		E5AEB680B3E2418AF8E54BA80FA04375 /* SocketRocket */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3DB023FAE7C32A342DCC7407E37E17AC /* Build configuration list for PBXNativeTarget "SocketRocket" */;
+			buildConfigurationList = FFEDE2AA0732FFE69A8F6BE5E42035F4 /* Build configuration list for PBXNativeTarget "SocketRocket" */;
 			buildPhases = (
-				B0E03B2FE36ADD13F5F4B2B96E06B7D2 /* Sources */,
-				C07D85B89C85D173AC55E81D54C3C90F /* Frameworks */,
-				34FF26BDCBFD0CAD3950388B00C51A5C /* Headers */,
+				08FA4D6264B68BD389D4EF2830911B76 /* Headers */,
+				CD507CD80966E41F0FE289DBC52ED9FF /* Sources */,
+				EDE6CBB429826F5992AA31F8972B908E /* Frameworks */,
+				24203558D66AC8380E1AD5F3CBC2A3DD /* Resources */,
 			);
 			buildRules = (
 			);
@@ -313,86 +314,112 @@
 			);
 			name = SocketRocket;
 			productName = SocketRocket;
-			productReference = 6A7DFA95C7F1E8EF8CECD1C68151F5B8 /* SocketRocket.framework */;
+			productReference = C3B83F23EFF278D2684DC79FD05A793A /* SocketRocket.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1020;
 			};
-			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 3.2";
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
-			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 51CC284C8F3DF158DBB53EC475F85F9C /* Products */;
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 0B80D0FA5452FEA0ECBFD8793F97BB72 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6D64070AF49F967141D24314D1688726 /* Pods-MeteorSwift */,
-				8A4BD74F8796839162FA5FA704CD9B0F /* SCrypto */,
-				B091B105A435664AD844B99B42E0D9CD /* SocketRocket */,
+				06C546FE5D6C5323229D0B493AC2AE14 /* Pods-MeteorSwift */,
+				5CA6F73CDCBE2A383BBE428B4D49F9EF /* SCrypto */,
+				E5AEB680B3E2418AF8E54BA80FA04375 /* SocketRocket */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		24203558D66AC8380E1AD5F3CBC2A3DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2DC02F21E8E9BB9AB4FF4BA006A79C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C34E89000775F3B992B3D57F82E08B4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		21BA76D5E443455C8F677DD2000DF472 /* Sources */ = {
+		58F6E6297422284DDABB4EE4C255F9D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BD3D5E5F4471F3DD8E5BDB5BB72E80CC /* SCrypto-dummy.m in Sources */,
-				CD24EE76DF2EF1223730AE545BAF07AD /* SCrypto.swift in Sources */,
+				140854CE93EFFA854B0324AEDD16AB3C /* SCrypto-dummy.m in Sources */,
+				93F211060A19B2AEF0B72DAB0F0DA83B /* SCrypto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B0E03B2FE36ADD13F5F4B2B96E06B7D2 /* Sources */ = {
+		72D652A2E0CD3D0DBC3401BEF379D4D5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BC2F501BE7FEAB27ACC73E9070D08A8 /* SocketRocket-dummy.m in Sources */,
-				FD2688C7E678F9823F96C026320FA93D /* SRWebSocket.m in Sources */,
+				C2A5A81C60ABAA0B2D8D3EF7E7553398 /* Pods-MeteorSwift-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1D4B52BEAFA053D9E248F2F4B27AD99 /* Sources */ = {
+		CD507CD80966E41F0FE289DBC52ED9FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E0C2E821DB9A5ED6F7BF994BC5D7FE9 /* Pods-MeteorSwift-dummy.m in Sources */,
+				0262BABC0143C8B5884F22B0F9E725FC /* SocketRocket-dummy.m in Sources */,
+				CC926191F3F8D331B5CFAC79E5740856 /* SRWebSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		66C2462B4711546D7AA102249E4F8A42 /* PBXTargetDependency */ = {
+		5C6949842B0F49E35885694216E981C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SCrypto;
-			target = 8A4BD74F8796839162FA5FA704CD9B0F /* SCrypto */;
-			targetProxy = 85AAA028707ADA40C1FEAEE8E60C9E75 /* PBXContainerItemProxy */;
+			target = 5CA6F73CDCBE2A383BBE428B4D49F9EF /* SCrypto */;
+			targetProxy = 2569E800E6870EBF02CC55983AD11B96 /* PBXContainerItemProxy */;
 		};
-		913F9FF5A88A3CB47E41B5F31BC73C58 /* PBXTargetDependency */ = {
+		8CE97FA2F743A37FB963662020F33EC5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SocketRocket;
-			target = B091B105A435664AD844B99B42E0D9CD /* SocketRocket */;
-			targetProxy = 263FFEB75E3A5F95EDB5E92E59ED1FF2 /* PBXContainerItemProxy */;
+			target = E5AEB680B3E2418AF8E54BA80FA04375 /* SocketRocket */;
+			targetProxy = 1E4BF988404F6C9DFADC737BD807F5E4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		199D972A13F2B4C56847F7A89CCA83BC /* Debug */ = {
+		07488D4657FB0A78086563621D425F8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -421,8 +448,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -443,18 +468,21 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Debug;
 		};
-		2B69B577EABEF899BAB4D2417EA5A6B5 /* Debug */ = {
+		22F72B35A0C8488726393CC90019C1D0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A3105EED9DEEC9B0BF2FDF04EBDFE384 /* SocketRocket.xcconfig */;
+			baseConfigurationReference = CE9253C1B8A1B5FB0F2C0C87593C5367 /* SocketRocket.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -466,49 +494,21 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Target Support Files/SocketRocket/SocketRocket-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SocketRocket/Info.plist";
+				INFOPLIST_FILE = "Target Support Files/SocketRocket/SocketRocket-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MODULEMAP_FILE = "Target Support Files/SocketRocket/SocketRocket.modulemap";
 				PRODUCT_MODULE_NAME = SocketRocket;
 				PRODUCT_NAME = SocketRocket;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		394981C2BBF92705CB3BF8BD87AF3EB9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7222474D052DE1A6C74C833C451069AF /* SCrypto.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/SCrypto/SCrypto-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SCrypto/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SCrypto/SCrypto.modulemap";
-				PRODUCT_MODULE_NAME = SCrypto;
-				PRODUCT_NAME = SCrypto;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -516,9 +516,9 @@
 			};
 			name = Release;
 		};
-		46E4AC2EF70307F1B1D8F4E30DBE02A6 /* Release */ = {
+		25BD6365491B9E590106177DCA72E301 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7074732FB28F14B822D039585AA6F57 /* Pods-MeteorSwift.release.xcconfig */;
+			baseConfigurationReference = C40A2649772701EE85F7D7CB4DC2664F /* Pods-MeteorSwift.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -530,10 +530,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-MeteorSwift/Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift.modulemap";
 				OTHER_LDFLAGS = "";
@@ -543,7 +547,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -551,9 +554,9 @@
 			};
 			name = Release;
 		};
-		6563F97089CF0F5BD95852118C7AC98C /* Debug */ = {
+		7D36F8328D09D694109BE3AD8E474718 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7222474D052DE1A6C74C833C451069AF /* SCrypto.xcconfig */;
+			baseConfigurationReference = 78CF4D3AB9C987D54B8D222950B44629 /* SCrypto.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -565,49 +568,21 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Target Support Files/SCrypto/SCrypto-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SCrypto/Info.plist";
+				INFOPLIST_FILE = "Target Support Files/SCrypto/SCrypto-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MODULEMAP_FILE = "Target Support Files/SCrypto/SCrypto.modulemap";
 				PRODUCT_MODULE_NAME = SCrypto;
 				PRODUCT_NAME = SCrypto;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		91F731E8D9641285C00427AF530A2AE2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A3105EED9DEEC9B0BF2FDF04EBDFE384 /* SocketRocket.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/SocketRocket/SocketRocket-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/SocketRocket/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/SocketRocket/SocketRocket.modulemap";
-				PRODUCT_MODULE_NAME = SocketRocket;
-				PRODUCT_NAME = SocketRocket;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -615,45 +590,11 @@
 			};
 			name = Release;
 		};
-		EA00707D435E6A1EE1FFDB4498180263 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 979DE875B32F95C4BD8E02B2CE78B38C /* Pods-MeteorSwift.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-MeteorSwift/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		FDB2FC4A1E5891381CD9D922145497F1 /* Release */ = {
+		A1962E6FF39BBAC201A2E5DDF99557DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -682,8 +623,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -702,53 +641,163 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;
 		};
+		AC75BA76B958B6AE053E50AEDCBC8C9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCC233FBA50444288967CF6527E0C4BE /* Pods-MeteorSwift.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BB117764B9A75A4E3F3B4097A2D56709 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE9253C1B8A1B5FB0F2C0C87593C5367 /* SocketRocket.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SocketRocket/SocketRocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SocketRocket/SocketRocket-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SocketRocket/SocketRocket.modulemap";
+				PRODUCT_MODULE_NAME = SocketRocket;
+				PRODUCT_NAME = SocketRocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FF8FE82FDDE5E86D58B92F93662665E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 78CF4D3AB9C987D54B8D222950B44629 /* SCrypto.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SCrypto/SCrypto-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SCrypto/SCrypto-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SCrypto/SCrypto.modulemap";
+				PRODUCT_MODULE_NAME = SCrypto;
+				PRODUCT_NAME = SCrypto;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				199D972A13F2B4C56847F7A89CCA83BC /* Debug */,
-				FDB2FC4A1E5891381CD9D922145497F1 /* Release */,
+				07488D4657FB0A78086563621D425F8A /* Debug */,
+				A1962E6FF39BBAC201A2E5DDF99557DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3DB023FAE7C32A342DCC7407E37E17AC /* Build configuration list for PBXNativeTarget "SocketRocket" */ = {
+		852DD8A7F838F0516921FAB9A411DED1 /* Build configuration list for PBXNativeTarget "SCrypto" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2B69B577EABEF899BAB4D2417EA5A6B5 /* Debug */,
-				91F731E8D9641285C00427AF530A2AE2 /* Release */,
+				FF8FE82FDDE5E86D58B92F93662665E7 /* Debug */,
+				7D36F8328D09D694109BE3AD8E474718 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8955EBD9343E5C388100264456C7366C /* Build configuration list for PBXNativeTarget "Pods-MeteorSwift" */ = {
+		D95AF41CE112CFDC674353D38A9FDF71 /* Build configuration list for PBXNativeTarget "Pods-MeteorSwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EA00707D435E6A1EE1FFDB4498180263 /* Debug */,
-				46E4AC2EF70307F1B1D8F4E30DBE02A6 /* Release */,
+				AC75BA76B958B6AE053E50AEDCBC8C9C /* Debug */,
+				25BD6365491B9E590106177DCA72E301 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A50DFD644247B84DDF36FAB10325723F /* Build configuration list for PBXNativeTarget "SCrypto" */ = {
+		FFEDE2AA0732FFE69A8F6BE5E42035F4 /* Build configuration list for PBXNativeTarget "SocketRocket" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6563F97089CF0F5BD95852118C7AC98C /* Debug */,
-				394981C2BBF92705CB3BF8BD87AF3EB9 /* Release */,
+				BB117764B9A75A4E3F3B4097A2D56709 /* Debug */,
+				22F72B35A0C8488726393CC90019C1D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 }

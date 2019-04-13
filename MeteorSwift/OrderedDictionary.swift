@@ -150,7 +150,7 @@ struct OrderedDictionary<K:Hashable, V: Any> {
     // MARK - Searching
 
     public func index(ofKey key: K) -> Int? {
-        return keys.index(of: key)
+        return keys.firstIndex(of: key)
     }
     //func index(of value: V) -> Int? {
     //    return values.index(of: value)
@@ -282,7 +282,7 @@ struct OrderedDictionary<K:Hashable, V: Any> {
     }
     
     public mutating func remove(key: K) {
-        guard let index = keys.index(of: key) else { return }
+        guard let index = keys.firstIndex(of: key) else { return }
         remove(at: index)
     }
     public mutating func remove(at index: Int) {
@@ -363,7 +363,7 @@ extension OrderedDictionary where V: Equatable {
         return values.contains(value) && keys.contains(key)
     }
     func index(of value: V) -> Int? {
-        return values.index(of: value)
+        return values.firstIndex(of: value)
     }
     func index(of value: V, with key: K) -> Int? {
         guard _pairs[key] == value else { return nil }
@@ -411,7 +411,7 @@ extension OrderedDictionary where V: Equatable {
     }
     
     mutating func remove(_ value: V) {
-        guard let index = values.index(of: value) else { return }
+        guard let index = values.firstIndex(of: value) else { return }
         remove(at: index)
     }
     mutating func remove(_ values: [V]) {

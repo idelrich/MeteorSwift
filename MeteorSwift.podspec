@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.author       = { "Stephen Orr" => "stephen@chatorr.ca" }
   s.platform     = :ios, "10.0"
-  s.source       = { :git => "https://github.com/idelrich/MeteorSwift.git", :tag => "0.0.6" }
+  s.source       = { :git => "https://github.com/idelrich/MeteorSwift.git", :tag => "0.0.13" }
   s.source_files = "MeteorSwift/*.swift", "MeteorSwift/*.h"
   s.dependency   "SocketRocket"
   s.dependency   "SCrypto"

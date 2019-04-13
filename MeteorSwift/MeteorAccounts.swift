@@ -196,7 +196,7 @@ extension MeteorClient { // Accounts
             let range = regex.rangeOfFirstMatch(in: callback, range: NSRange(0..<callback.count))
             callback = String(callback[Range(range, in: callback)!])
             
-            return try? JSONSerialization.jsonObject(with: callback.data(using: .utf8)!, options: []) as! EJSONObject
+            return try? JSONSerialization.jsonObject(with: callback.data(using: .utf8)!, options: []) as? EJSONObject
         }
         return nil
     }
