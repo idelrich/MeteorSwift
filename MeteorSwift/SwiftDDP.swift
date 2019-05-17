@@ -136,13 +136,22 @@ extension SwiftDDP { // MARK - Internal
             // Go through the parameters and try to encode any that we can.            
             var encodedParams = [Any]()
             for param in parameters {
-                if let encoded = convertToEJSON(object: param) {
+                //
+                // TODO: Should we be able to handle a [Any] ??
+                if let array = param as? [CollectionDecoder] {
+                    let encoded = array.compactMap { convertToEJSON(object: $0) }
+                    if encoded.count == array.count {
+                        encodedParams.append(encoded)
+                    } else {
+                        encodedParams.append(array)
+                    }
+                } else if let encoded = convertToEJSON(object: param) {
                     encodedParams.append(encoded)
                 } else {
                     encodedParams.append(param)
                 }
             }
-            
+
             params["params"] = encodedParams
         }
         if let data = try? JSONSerialization.data(withJSONObject: params, options: [])    {
