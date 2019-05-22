@@ -172,7 +172,7 @@ extension MeteorClient { // Parsing
         var collection = collections[collectionName, default: MeteorCollection()]
         
         //
-        // This collection is codable, convert it.
+        // Get the EJSONObject version of the current data.
         if var json = ddp!.convertToEJSON(object: collection[_id]!) {
             //
             // <json> is now the current version of the onject.
@@ -189,7 +189,7 @@ extension MeteorClient { // Parsing
                 }
             }
             //
-            // And now decode it back to the original obkect type
+            // And now decode it back to the original object type (if possible)
             if let collectionCoder = codables[collectionName] {
                 
                 do {
@@ -203,9 +203,15 @@ extension MeteorClient { // Parsing
                     print("MeteorSwift: Failed to update element in \(collectionName) - reported error \(error.localizedDescription)")
                     print("MeteorSwift: Raw Data \(json)")
                 }
-            }           
+            } else {
+                collection[_id] = json
+                collections[collectionName] = collection
+            }
             return (_id, collection[_id]!)
         } else {
+            //
+            // Object is not in the collection currently, shouldn't happen?
+            // Decode the new object and remove any fields before saving it.
             var (_id, value) = mongoObject(with: message)
             for key in message["cleared"] as! [String] {
                 value.removeValue(forKey:key)
