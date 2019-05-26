@@ -188,9 +188,8 @@ extension MeteorClient { // Accounts
     func handleOAuthCallback(callback:String?) -> EJSONObject? {
         // it's possible callback is nil
         
-        guard var callback = callback else {
-            return nil
-        }
+        guard var callback = callback                               else { return nil }
+        
         if let regex = try? NSRegularExpression(pattern: "<div id=\"config\" style=\"display:none;\">(.*?)</div>") {
             
             let range = regex.rangeOfFirstMatch(in: callback, range: NSRange(0..<callback.count))

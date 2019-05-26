@@ -140,7 +140,10 @@ public struct MongoCollection<T> {
     ///   - _ _id: The Mongo _id string of the object to match (if present).
     /// - Returns: The item in the collection with matching id (if any)
     public func findOne(_ _id: String) -> T? {
-        return findOne(matching: { self.mongoId(for: $0) == _id})
+        if let collection = meteor.collections[name] {
+            return collection[_id] as? T
+        }
+        return nil
     }
     ///
     /// Returns the mongoId for an object. If the object conforms to MongoObject then
