@@ -180,7 +180,7 @@ public struct MongoCollection<T> {
     ///   - callback: A callback that provides information about any changes to records in the collection
     /// - Returns: A String id that must be used to stop watching this collection (see stopWatching)
     public func watch(_ _id: String, callback: @escaping CollectionCallback<T>) -> String {
-        return watcher.watch(matching: { self.mongoId(for: $0) == _id}, callback: callback)
+        return watcher.watch(id: _id, callback: callback)
     }
     /// Stops a previously established "watch" on changes to this collection
     ///
@@ -197,6 +197,7 @@ public struct MongoCollection<T> {
 
 class MeteorWatcher<T>: NSObject {
     private var watchList   = [String: (MeteorMatcher<T>?, CollectionCallback<T>)]()
+    private var idWatchList = [String: (String, CollectionCallback<T>)]()
 
     private let meteor      : MeteorClient
     private let collection  : String
@@ -215,14 +216,25 @@ class MeteorWatcher<T>: NSObject {
         watchList[watchId] = (matching, callback)
         return watchId
     }
+    func watch(id: String, callback: @escaping CollectionCallback<T>) -> String {
+        if watchList.isEmpty {
+            addObservers()
+        }
+        let watchId = DDPIdGenerator.nextId
+        idWatchList[watchId] = (id, callback)
+        return watchId
+    }
+
     func remove(_ watchId: String) {
         watchList.removeValue(forKey: watchId)
-        if watchList.isEmpty {
+        idWatchList.removeValue(forKey: watchId)
+        if watchList.isEmpty && idWatchList.isEmpty {
             removeObservers()
         }
     }
     func removeAll() {
         watchList.removeAll()
+        idWatchList.removeAll()
         removeObservers()
     }
     private func addObservers() {
@@ -239,6 +251,13 @@ class MeteorWatcher<T>: NSObject {
         let reason = ChangedReason(rawValue: message.userInfo!["msg"] as! String) ?? .added
         let _id = message.userInfo!["_id"] as! String
         
+        for (_, (id, callback)) in idWatchList {
+            if id == _id {
+                let item = message.userInfo!["result"] as? T
+                callback(reason, _id, item)
+                return
+            }
+        }
         for (_, (matching, callback)) in watchList {
             guard reason != .removed else {
                 callback(reason, _id, nil)
