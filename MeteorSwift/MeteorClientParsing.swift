@@ -173,7 +173,8 @@ extension MeteorClient { // Parsing
         
         //
         // Get the EJSONObject version of the current data.
-        if var json = ddp!.convertToEJSON(object: collection[_id]!) {
+        if let object = collection[_id],
+            var json = ddp!.convertToEJSON(object: object) {
             //
             // <json> is now the current version of the onject.
             //
@@ -191,7 +192,6 @@ extension MeteorClient { // Parsing
             //
             // And now decode it back to the original object type (if possible)
             if let collectionCoder = codables[collectionName] {
-                
                 do {
                     if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
                         if let result = try collectionCoder.decode(data: data, decoder: jsonDecoder) {
@@ -211,10 +211,17 @@ extension MeteorClient { // Parsing
         } else {
             //
             // Object is not in the collection currently, shouldn't happen?
+            // Or couldn'r be encoded to EJSONObject, which also shouldn't happen
+            print("********************")
+            print("Unexpected code path - couldn't decode/encode original object for \(message)")
+            print("********************")
+            //
             // Decode the new object and remove any fields before saving it.
             var (_id, value) = mongoObject(with: message)
-            for key in message["cleared"] as! [String] {
-                value.removeValue(forKey:key)
+            if let cleared = message["cleared"] as? [String] {
+                for key in cleared {
+                    value.removeValue(forKey:key)
+                }
             }
             collection[_id] = value
             

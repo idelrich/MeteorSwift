@@ -108,8 +108,6 @@ class SwiftDDP: NSObject {
         do {
             if let encodable = object as? CollectionDecoder {
                 if let data = try encodable.encode(encoder: jsonEncoder) {
-                    //
-                    // Merge changes into the original object.
                     let encoded = try JSONSerialization.jsonObject(with: data, options: [])
                     if let result = encoded as? EJSONObject {
                         return result
