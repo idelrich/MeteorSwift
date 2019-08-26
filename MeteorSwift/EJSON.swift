@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct EJSONDate: Codable {
+public struct EJSONDate: Codable, CollectionDecoder {
     enum CodingKeys : String, CodingKey { case _elapsed = "$date" }
     private let _elapsed: Int
     
@@ -19,7 +19,7 @@ public struct EJSONDate: Codable {
     public var ms:TimeInterval { return TimeInterval(_elapsed)/1000 }
 }
 
-public struct EJSONData: Codable {
+public struct EJSONData: Codable, CollectionDecoder {
     enum CodingKeys : String, CodingKey { case _data = "$binary" }
     private let _data: String
     
