@@ -105,12 +105,15 @@ class SwiftDDP: NSObject {
     var socketState:SRReadyState { get { return webSocket?.readyState ?? SRReadyState.CLOSED } }
 
     func convertToEJSON(object: Any) -> EJSONObject? {
+        //
+        // TODO: Add support for nested arrays...
         do {
             if let encodable = object as? CollectionDecoder {
                 if let data = try encodable.encode(encoder: jsonEncoder) {
                     let encoded = try JSONSerialization.jsonObject(with: data, options: [])
                     if let result = encoded as? EJSONObject {
                         return result
+                    
                     } else {
                         print("MeteorSwift: Encoded \(object) is not EJSONObject")
                     }
@@ -128,29 +131,22 @@ class SwiftDDP: NSObject {
 
 extension SwiftDDP { // MARK - Internal
     func buildJSON(withFields: EJSONObject, parameters: [Any]?) -> String                            {
+        
         var params = withFields
         if let parameters = parameters {
             //
             // Go through the parameters and try to encode any that we can.            
-            var encodedParams = [Any]()
-            for param in parameters {
-                //
-                // TODO: Should we be able to handle a [Any] ??
-                if let array = param as? [CollectionDecoder] {
+            params["params"] = parameters.map {
+                if let array = $0 as? [Any] {
                     let encoded = array.compactMap { convertToEJSON(object: $0) }
                     if encoded.count == array.count {
-                        encodedParams.append(encoded)
+                        return encoded
                     } else {
-                        encodedParams.append(array)
+                        return array
                     }
-                } else if let encoded = convertToEJSON(object: param) {
-                    encodedParams.append(encoded)
-                } else {
-                    encodedParams.append(param)
                 }
-            }
-
-            params["params"] = encodedParams
+                return convertToEJSON(object: $0) ?? $0
+            } as [Any]
         }
         if let data = try? JSONSerialization.data(withJSONObject: params, options: [])    {
             return String(data: data, encoding: .utf8) ?? ""
