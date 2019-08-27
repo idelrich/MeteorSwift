@@ -106,9 +106,18 @@ class SwiftDDP: NSObject {
 
     func convertToEJSON(object: Any) -> EJSONObject? {
         //
+        // Handle the "finicky" types (Data and Date) as well as
+        // the self encoding types (conforming to CollectionDecoder)
+        // and pass through the rest.
+
+        //
         // TODO: Add support for nested arrays...
         do {
-            if let encodable = object as? CollectionDecoder {
+            if let date = object as? Date {
+                return date.bson
+            } else if let data = object as? Data {
+                return data.bson
+            } else if let encodable = object as? CollectionDecoder {
                 if let data = try encodable.encode(encoder: jsonEncoder) {
                     let encoded = try JSONSerialization.jsonObject(with: data, options: [])
                     if let result = encoded as? EJSONObject {
