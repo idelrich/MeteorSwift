@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D3049441A8A909C2C34AC1D /* Pods_MeteorSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D66EF6EFB7C1A4BF056631 /* Pods_MeteorSwift.framework */; };
+		DC30F7DA2333DE5600957C47 /* OfflineCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC30F7D92333DE5600957C47 /* OfflineCollection.swift */; };
 		DC9F198C20FF6583002B9714 /* MeteorSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = DC9F198A20FF6583002B9714 /* MeteorSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC9F199920FF65EF002B9714 /* MongoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F199220FF65EF002B9714 /* MongoCollection.swift */; };
 		DC9F199A20FF65EF002B9714 /* SwiftDDP.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F199320FF65EF002B9714 /* SwiftDDP.swift */; };
@@ -25,6 +26,7 @@
 		2C7C74C5011DA3D0C83A20BB /* Pods-MeteorSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MeteorSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		63D66EF6EFB7C1A4BF056631 /* Pods_MeteorSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MeteorSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94B8BBDA1F7164A11EAB3036 /* Pods-MeteorSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MeteorSwift.release.xcconfig"; path = "Pods/Target Support Files/Pods-MeteorSwift/Pods-MeteorSwift.release.xcconfig"; sourceTree = "<group>"; };
+		DC30F7D92333DE5600957C47 /* OfflineCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineCollection.swift; sourceTree = "<group>"; };
 		DC9F198720FF6583002B9714 /* MeteorSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MeteorSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC9F198A20FF6583002B9714 /* MeteorSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeteorSwift.h; sourceTree = "<group>"; };
 		DC9F198B20FF6583002B9714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			children = (
 				DC9F199620FF65EF002B9714 /* MeteorClient.swift */,
 				DC9F199220FF65EF002B9714 /* MongoCollection.swift */,
+				DC30F7D92333DE5600957C47 /* OfflineCollection.swift */,
 				DCFCC97F21269AB000499A2A /* CollectionDecoder.swift */,
 				DC9F199420FF65EF002B9714 /* EJSON.swift */,
 				DC9F199320FF65EF002B9714 /* SwiftDDP.swift */,
@@ -222,6 +225,7 @@
 				DC9F199D20FF65EF002B9714 /* MeteorClient.swift in Sources */,
 				DC9F199B20FF65EF002B9714 /* EJSON.swift in Sources */,
 				DC9F1A1F210007B8002B9714 /* MeteorAccounts.swift in Sources */,
+				DC30F7DA2333DE5600957C47 /* OfflineCollection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

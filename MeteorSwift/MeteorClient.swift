@@ -209,7 +209,7 @@ public class MeteorClient: NSObject {
     ///   - collectionName: The name of the collection to insert a record into.
     ///   - objectWithId: The objectId to remove.
     ///   - responseCallback: Optional callback with results of the remove.
-    public func remove(from collectionName: String, objectWithId _id: String, responseCallback: MeteorClientMethodCallback?) {
+    public func remove(from collectionName: String, objectWithId _id: String, responseCallback: MeteorClientMethodCallback? = nil) {
         
         call(method: "/\(collectionName)/remove", parameters: [["_id", _id]], responseCallback: responseCallback)
     

@@ -41,10 +41,11 @@ public protocol MongoObject {
 /// the ability to register "watchers" that are notified as well a perform find
 /// and findOne like operations including sorting.
 public struct MongoCollection<T> {
-    private let meteor      : MeteorClient
-    private let name        : String
     private let watcher     : MeteorWatcher<T>
     
+    let meteor              : MeteorClient
+    let name                : String
+
     /// Create a MongoCollection on the client
     ///
     /// - Parameters:
