@@ -60,13 +60,22 @@ public struct MongoCollection<T> {
             meteor.registerCodable(collection, collectionCoder: coder)
         }
     }
-
+    /// Count of objects in the collection
+    ///
+    /// Return: count of objects
+    public var count : Int {
+        guard let collection = meteor.collections[name] else { return 0 }
+        return collection.count
+    }
+    public var isEmpty : Bool {
+        return (meteor.collections[name]?.count ?? 0) == 0
+    }
     /// Insert an object into this collection
     ///
     /// - Parameters:
     ///   - object: Object to insert
     ///   - responseCallback: (Optional) callback to be called once server completes this response
-    /// - Returns: _id iof newly inserted object (or nil)
+    /// - Returns: _id of newly inserted object (or nil)
     public func insert(_ object: T, responseCallback: MeteorClientMethodCallback? = nil) -> String? {
         return meteor.insert(into: name, object: object, responseCallback: responseCallback)
     }

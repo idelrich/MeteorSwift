@@ -48,6 +48,10 @@ extension MongoCollection where T : OfflineObject                       {
         //
         // Mark each entry as "_wasOffline_" so we know it came from the cache,
         // and add it directly to the collection.
+        if meteor.collections[name] == nil {
+            meteor.collections[name] = MeteorCollection()
+        }
+        
         entries.forEach {
             var entry = $0
             entry._wasOffline_ = true
