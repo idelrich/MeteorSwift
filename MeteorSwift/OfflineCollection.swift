@@ -29,7 +29,7 @@ extension MongoCollection where T : OfflineObject                       {
         //
         // Mark the current time (which is when the object was last valid from the server),
         // encode all objects and write them to storage.
-        try encoder.encode(collection.compactMap({ (object) -> T? in
+        try encoder.encode(collection.compactMap({ (_, object) -> T? in
             guard var entry = object as? T else { return nil }
             //
             // Mark the time we cached the object.
