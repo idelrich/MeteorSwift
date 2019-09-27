@@ -33,7 +33,9 @@ extension MongoCollection where T : OfflineObject                       {
             guard var entry = object as? T else { return nil }
             //
             // Mark the time we cached the object.
-            entry._lastUpdated_ = now
+            if entry._lastUpdated_ == nil {
+                entry._lastUpdated_ = now
+            }
             return entry
         })).write(to: fileURL)
     }

@@ -12,19 +12,15 @@ extension MeteorClient { // Parsing
     func handleMethodResult(withMessageId messageId: String, message: DDPMessage)                           {
         if _methodIds.contains(messageId) {
             let callback = _responseCallbacks[messageId]
-            var response: [String:Any]?
             if let errorDesc = message["error"] as? EJSONObject {
                 let userInfo = [NSLocalizedDescriptionKey: errorDesc["message"] as? String ?? "Missing Error Message"]
                 let responseError = NSError(domain: errorDesc["errorType"] as? String ?? "Method Error",
                                             code: errorDesc["error"] as? Int ?? -1,
                                             userInfo:userInfo)
-                callback?(nil, responseError)
-                response = ["error": responseError]
+                callback?(.failure(responseError))
             } else {
-                callback?(message, nil)
+                callback?(.success(message))
             }
-            let name = Notification.Name("response_\(messageId)")
-            NotificationCenter.default.post(name: name, object: self, userInfo: response)
             _responseCallbacks.removeValue(forKey:messageId)
             _methodIds.remove(messageId)
         }
@@ -32,33 +28,33 @@ extension MeteorClient { // Parsing
     func handleAdded(message: DDPMessage)                                                                   {
         if let collection = message["collection"] as? String {
             let (_id, value) = parseObjectAndAddToCollection(message)
-            sendNotification(for: "added", collection: collection, id: _id, value: value)
+            sendNotification(for: .added, collection: collection, id: _id, value: value)
         }
     }
     func handleAddedBefore(message: DDPMessage)                                                             {
         if let collection = message["collection"] as? String {
             let beforeId = message["before"] as! String
             let (_id, value) = parseObjectAndAddToCollection(message, beforeId: beforeId)
-            sendNotification(for: "addedBefore", collection: collection, id: _id, value: value)
+            sendNotification(for: .addedBefore, collection: collection, id: _id, value: value)
         }
     }
     func handleMovedBefore(message: DDPMessage)                                                             {
         
         if let collection = message["collection"] as? String {
             let (_id, value) = parseMovedBefore(message)
-            sendNotification(for: "movedBefore", collection: collection, id: _id, value: value)
+            sendNotification(for: .movedBefore, collection: collection, id: _id, value: value)
         }
     }
     func handleRemoved(message: DDPMessage)                                                                 {
         if let collection = message["collection"] as? String {
             let (_id, value) = parseRemoved(message)
-            sendNotification(for: "removed", collection: collection, id: _id, value: value)
+            sendNotification(for: .removed, collection: collection, id: _id, value: value)
         }
     }
     func handleChanged(message: DDPMessage)                                                                 {
         if let collection = message["collection"] as? String {
             let (_id, value) = parseObjectAndUpdateCollection(message)
-            sendNotification(for: "changed", collection: collection, id: _id, value: value)
+            sendNotification(for: .changed, collection: collection, id: _id, value: value)
         }
     }
     
@@ -249,17 +245,16 @@ extension MeteorClient { // Parsing
         }
         return (_id, result)
     }
-    private func sendNotification(for msg: String, collection: String, id: String, value: Any?)             {
-        var userInfo:[String: Any] = ["msg": msg, "_id": id]
+    private func sendNotification(for reason: ChangedReason, collection: String, id: String, value: Any?)   {
+        //
+        // TODO: Deprecate these.
+        var userInfo:[String: Any] = ["msg": reason.rawValue, "_id": id]
         if let value = value {
             userInfo["result"] = value
         }
+        if let watcher = _collectionWatchers[collection] {
+            watcher.onChange(id, reason: reason, object: value)
+        }
 
-        var name = Notification.Name("\(collection)_\(msg)")
-        NotificationCenter.default.post(name: name, object: self, userInfo: userInfo)
-        name = Notification.Name(collection)
-        NotificationCenter.default.post(name: name, object: self, userInfo: userInfo)
-        name = Notification.Name(msg)
-        NotificationCenter.default.post(name: name, object: self, userInfo: userInfo)
     }
 }

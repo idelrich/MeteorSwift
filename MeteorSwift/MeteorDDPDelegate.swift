@@ -10,30 +10,26 @@ import Foundation
 
 extension MeteorClient : SwiftDDPDelegate {
     
-    func didReceive(message: DDPMessage) {
+    func didReceive(message: DDPMessage)                        {
         guard let msg = message["msg"] as? String else { return }
         
         let messageId = message["id"] as? String
         
         switch msg {
+        case "added":               handleAdded(message: message)
+        case "addedBefore":         handleAddedBefore(message:message)
+        case "movedBefore":         handleMovedBefore(message:message)
+        case "removed":             handleRemoved(message: message)
+        case "changed":             handleChanged(message: message)
+        case "ping":                ddp?.pong(id: messageId)
+        
         case "result":
             if let messageId = messageId {
-                handleMethodResult(withMessageId: messageId, message:message)
+                handleMethodResult(withMessageId: messageId, message: message)
             } else {
                 print("MeteorSwift: Missing message ID \(message)")
             }
-        case "added":
-            handleAdded(message: message)
-        case "addedBefore":
-            handleAddedBefore(message:message)
-        case "movedBefore":
-            handleMovedBefore(message:message)
-        case "removed":
-            handleRemoved(message: message)
-        case "changed":
-            handleChanged(message: message)
-        case "ping":
-            ddp?.pong(id: messageId)
+            
         case "connected":
             connected = true
             if let sessionToken = sessionToken { //TODO check expiry date
@@ -42,39 +38,35 @@ extension MeteorClient : SwiftDDPDelegate {
             connectionDelegate?.meteorClientReady()
             NotificationCenter.default.post(name: Notification.MeteorClientConnectionReady, object:self)
             makeMeteorDataSubscriptions()
+        
         case "ready":
             if let subs = message["subs"] as? [String] {
                 for readySubscriptionId in subs {
                     if let name = subscriptions[readySubscriptionId] {
-                        let notificationName = Notification.Name(rawValue: "\(name)_ready")
-                        NotificationCenter.default.post(name: notificationName, object:self, userInfo: ["SubscriptionId": readySubscriptionId])
-                        if let callback = _subscriptionCallback[readySubscriptionId] {
-                            callback(notificationName, readySubscriptionId)
-                        }
-                        break
-                    }
-                }
-            }
-        case "updated":
-            if let methods = message["methods"] as? [String] {
-                for updateMethod in methods {
-                    for methodId in _methodIds {
-                        if (methodId == updateMethod) {
-                            let notificationName = Notification.Name(rawValue: "\(methodId)_update")
-                            NotificationCenter.default.post(name: notificationName, object:self)
-                            break
-                        }
+                        _readySubscriptions[readySubscriptionId] = true
+                        _subscriptionCallback[readySubscriptionId]?(name)
                     }
                 }
             }
             
-        case "nosub", "error":
-            break
+        case "updated":
+            // TODO: Understand what this means...
+            if let methods = message["methods"] as? [String] {
+                for updateMethod in methods {
+                    for methodId in _methodIds  where methodId == updateMethod {
+                        let notificationName = Notification.Name(rawValue: "\(methodId)_update")
+                        NotificationCenter.default.post(name: notificationName, object:self)
+                        break
+                    }
+                }
+            }
+            
+        case "nosub", "error":          break
         default:
             break
         }
     }
-    func didOpen() {
+    func didOpen()                                              {
         websocketReady = true
         resetBackoff()
         resetCollections()
@@ -82,19 +74,17 @@ extension MeteorClient : SwiftDDPDelegate {
         connectionDelegate?.meteorDidConnect()
         NotificationCenter.default.post(name: Notification.MeteorClientDidConnect, object: self)
     }
-    func didReceive(connectionError: Error) {
+    func didReceive(connectionError: Error)                     {
         handleConnectionError()
     }
-    func didReceiveConnectionClose() {
+    func didReceiveConnectionClose()                            {
         handleConnectionError()
     }
-    
-    func ping() {
+    func ping()                                                 {
         guard connected else {
             return
         }
         ddp?.ping(id: DDPIdGenerator.nextId)
     }
-
 }
 

@@ -31,6 +31,10 @@ public enum ChangedReason: String {
     case changed
 }
 
+protocol ObjectChangeLister {
+    func onChange(_ _id:String, reason: ChangedReason, object: Any?)
+}
+
 public protocol MongoObject {
     var _id: String { get set }
 }
@@ -51,23 +55,24 @@ public struct MongoCollection<T> {
     /// - Parameters:
     ///   - meteor: Instance of meteor this collection can be found in
     ///   - collection: Name of the collection
-    public init(meteor: MeteorClient, collection: String) {
+    public init(meteor: MeteorClient, collection: String)                                                           {
         self.meteor = meteor
         self.name = collection
         watcher = MeteorWatcher(meteor: meteor, collection: collection)
         
         if let coder = T.self as? CollectionDecoder.Type {
-            meteor.registerCodable(collection, collectionCoder: coder)
+            meteor.register(codable: coder, for: collection)
         }
+        meteor.register(watcher: watcher, for: collection)
     }
     /// Count of objects in the collection
     ///
     /// Return: count of objects
-    public var count : Int {
+    public var count : Int                                                                                          {
         guard let collection = meteor.collections[name] else { return 0 }
         return collection.count
     }
-    public var isEmpty : Bool {
+    public var isEmpty : Bool                                                                                       {
         return (meteor.collections[name]?.count ?? 0) == 0
     }
     /// Insert an object into this collection
@@ -76,7 +81,7 @@ public struct MongoCollection<T> {
     ///   - object: Object to insert
     ///   - responseCallback: (Optional) callback to be called once server completes this response
     /// - Returns: _id of newly inserted object (or nil)
-    public func insert(_ object: T, responseCallback: MeteorClientMethodCallback? = nil) -> String? {
+    public func insert(_ object: T, responseCallback: MeteorClientMethodCallback? = nil) -> String?                 {
         return meteor.insert(into: name, object: object, responseCallback: responseCallback)
     }
     /// Inserts a value (typically taken from local store) into the
@@ -86,7 +91,7 @@ public struct MongoCollection<T> {
     /// - Parameters:
     ///     item:
     @discardableResult
-    public func add(item: T) -> Bool {
+    public func add(item: T) -> Bool                                                                                {
         if let _id = mongoId(for: item) {
             meteor.add(item: item, forId: _id, into: name)
             return true
@@ -100,7 +105,7 @@ public struct MongoCollection<T> {
     ///   - changes: EJSONObj containing the required updates. Fields marked with NSNull are
     ///              $unset, while other fields are $set.
     ///   - responseCallback: (Optional) callback to be called once server completes this response
-    public func update(_ _id: String, changes: EJSONObject, responseCallback: MeteorClientMethodCallback? = nil) {
+    public func update(_ _id: String, changes: EJSONObject, responseCallback: MeteorClientMethodCallback? = nil)    {
         meteor.update(into: name, objectWithId: _id, changes: changes, responseCallback: responseCallback)
     }
     /// Remove an object with the specified id from this collection
@@ -108,7 +113,7 @@ public struct MongoCollection<T> {
     /// - Parameters:
     ///   - _id: id of object to remove from theis collection
     ///   - responseCallback: (Optional) callback to be called once server completes this response
-    public func remove(_ _id: String, responseCallback: MeteorClientMethodCallback? = nil) {
+    public func remove(_ _id: String, responseCallback: MeteorClientMethodCallback? = nil)                          {
         meteor.remove(from: name, objectWithId: _id, responseCallback: responseCallback)
     }
     /// Find all records that pass the provided "matching" closure, sorted by
@@ -118,7 +123,7 @@ public struct MongoCollection<T> {
     ///   - matching: (Optional) A MeteorPredicate closure that determines which records to include
     ///   - sorted: (Optional) A MeteorSorter closure that determines how to sort records.
     /// - Returns: An array of the type held in this collection
-    public func find(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> [T] {
+    public func find(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> [T]                      {
         
         if let collection = meteor.collections[name] {
             var results:[T] = collection.values.compactMap({
@@ -140,7 +145,7 @@ public struct MongoCollection<T> {
     ///   - matching: A MeteorPredicate closure that determines which records to include
     ///   - sorted: (Optional) A MeteorSorter closure that determines how to sort records.
     /// - Returns: The first element of the resulting find if any
-    public func findOne(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> T? {
+    public func findOne(matching: MeteorMatcher<T>? = nil, sorted: MeteorSorter<T>? = nil) -> T?                    {
         return find(matching: matching, sorted: sorted).first
     }
     /// Find the record in this collection with a Mongo _id matching the passed in
@@ -149,7 +154,7 @@ public struct MongoCollection<T> {
     /// - Parameters:
     ///   - _ _id: The Mongo _id string of the object to match (if present).
     /// - Returns: The item in the collection with matching id (if any)
-    public func findOne(_ _id: String) -> T? {
+    public func findOne(_ _id: String) -> T?                                                                        {
         if let collection = meteor.collections[name] {
             return collection[_id] as? T
         }
@@ -162,7 +167,7 @@ public struct MongoCollection<T> {
     ///
     /// - Parameters:
     ///      item: The object to extract the MongoId from
-    private func mongoId(for item: T) -> String? {
+    private func mongoId(for item: T) -> String?                                                                    {
         var _id: String?
         if let obj = item as? MongoObject {
             _id = obj._id
@@ -180,7 +185,7 @@ public struct MongoCollection<T> {
     ///   - matching: A MeteorPredicate closure that determines which records to watch include
     ///   - callback: A callback that provides information about any changes to records in the collection
     /// - Returns: A String id that must be used to stop watching this collection (see stopWatching)
-    public func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
+    public func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String       {
         return watcher.watch(matching: matching, callback: callback)
     }
     /// Establishes a "watch" on changes to an object in this collection with a specific _id.
@@ -189,96 +194,76 @@ public struct MongoCollection<T> {
     ///   - _ _id: A String with the Meteor objectId (_id) to establish a watch for.
     ///   - callback: A callback that provides information about any changes to records in the collection
     /// - Returns: A String id that must be used to stop watching this collection (see stopWatching)
-    public func watch(_ _id: String, callback: @escaping CollectionCallback<T>) -> String {
+    public func watch(_ _id: String, callback: @escaping CollectionCallback<T>) -> String                           {
         return watcher.watch(id: _id, callback: callback)
     }
     /// Stops a previously established "watch" on changes to this collection
     ///
     /// - Parameter watchId: An id previously returned by "watch()"
-    public func stopWatching(_ watchId: String) {
+    public func stopWatching(_ watchId: String)                                                                     {
         watcher.remove(watchId)
     }
     /// Removes any previously created change watcher for this collection
-    public func stopAllWatches() {
+    public func stopAllWatches()                                                                                    {
         watcher.removeAll()
     }
 
 }
 
-class MeteorWatcher<T>: NSObject {
+class MeteorWatcher<T>: NSObject                                                                                    {
     private var watchList   = [String: (MeteorMatcher<T>?, CollectionCallback<T>)]()
     private var idWatchList = [String: (String, CollectionCallback<T>)]()
 
     private let meteor      : MeteorClient
     private let collection  : String
 
-    init(meteor client: MeteorClient, collection name: String) {
+    init(meteor client: MeteorClient, collection name: String)                                                      {
         meteor = client
         collection = name
         
         super.init()
     }
-    func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String {
-        if watchList.isEmpty {
-            addObservers()
-        }
+    func watch(matching: MeteorMatcher<T>? = nil, callback: @escaping CollectionCallback<T>) -> String              {
         let watchId = DDPIdGenerator.nextId
         watchList[watchId] = (matching, callback)
         return watchId
     }
-    func watch(id: String, callback: @escaping CollectionCallback<T>) -> String {
-        if watchList.isEmpty {
-            addObservers()
-        }
+    func watch(id: String, callback: @escaping CollectionCallback<T>) -> String                                     {
         let watchId = DDPIdGenerator.nextId
         idWatchList[watchId] = (id, callback)
         return watchId
     }
-
-    func remove(_ watchId: String) {
+    func remove(_ watchId: String)                                                                                  {
         watchList.removeValue(forKey: watchId)
         idWatchList.removeValue(forKey: watchId)
-        if watchList.isEmpty && idWatchList.isEmpty {
-            removeObservers()
-        }
     }
-    func removeAll() {
+    func removeAll()                                                                                                {
         watchList.removeAll()
         idWatchList.removeAll()
-        removeObservers()
     }
-    private func addObservers() {
-        //
-        // Get all notifications for changes to this collection
-        NotificationCenter.default.addObserver(self, selector: #selector(onChange(message:)),
-                                               name: Notification.Name(collection), object: meteor)
-    }
-    private func removeObservers() {
-        NotificationCenter.default.removeObserver(self)
-    }
+}
 
-    @objc func onChange(message: NSNotification) {
-        let reason = ChangedReason(rawValue: message.userInfo!["msg"] as! String) ?? .added
-        let _id = message.userInfo!["_id"] as! String
-        
-        for (_, (id, callback)) in idWatchList {
-            if id == _id {
-                let item = message.userInfo!["result"] as? T
-                callback(reason, _id, item)
-                return
-            }
+extension MeteorWatcher : ObjectChangeLister {
+    func onChange(_ _id:String, reason: ChangedReason, object: Any?)                                                {
+        guard let item = object as? T else { return }
+        //
+        // Check to see if this item's _id is being watched, and trigger the
+        // callback if so.
+        for (_, (id, callback)) in idWatchList where id == _id {
+            callback(reason, _id, item)
         }
+        //
+        // Check to see if the item matches a particular match criteria, and
+        // trigger the callback if so.
         for (_, (matching, callback)) in watchList {
             guard reason != .removed else {
                 callback(reason, _id, nil)
                 continue
             }
-            let item = message.userInfo!["result"] as? T
-            if let item = item, let matching = matching, !matching(item) { continue }
+            if let matching = matching, !matching(item) { continue }
             callback(reason, _id, item)
         }
     }
 }
-
 
 

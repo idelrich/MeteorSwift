@@ -10,13 +10,13 @@ import Foundation
 import SCrypto
 
 extension MeteorClient { // Accounts
-    func logon(withUserParameters: EJSONObject, responseCallback: MeteorClientMethodCallback?) {
+    func logon(withUserParameters: EJSONObject, responseCallback: MeteorClientMethodCallback?)                          {
         guard authState != .AuthStateLoggingIn else {
             let errorDesc = "You must wait for the current logon request to finish before sending another."
             let logonError = NSError(domain: MeteorClient.MeteorTransportErrorDomain,
                                      code: MeteorClientError.LogonRejected.rawValue,
                                      userInfo: [NSLocalizedDescriptionKey: errorDesc])
-            responseCallback?(nil, logonError)
+            responseCallback?(.failure(logonError))
             return
         }
         
@@ -27,20 +27,22 @@ extension MeteorClient { // Accounts
         setAuthStateToLoggingIn()
         
         call(method: "login", parameters: [withUserParameters]) {
-            if let error = $1 {
-                self.setAuthStatetoLoggedOut()
-                self.authDelegate?.authenticationFailed(withError: error)
-            } else if let response = $0 as? EJSONObject {
+            switch $0 {
+            case .success(let response):
                 // tokenExpires.$date : expiry date
                 if let result = response["result"] as? EJSONObject {
                     self.setAuthStateToLoggedIn(userId: result["id"] as! String, withToken: result["token"] as! String)
                     self.authDelegate?.authenticationWasSuccessful()
                 }
+
+            case .failure(let error):
+                self.setAuthStatetoLoggedOut()
+                self.authDelegate?.authenticationFailed(withError: error)
             }
-            responseCallback?($0, $1)
+            responseCallback?($0)
         }
     }
-    func signup(withUserParameters params:EJSONObject, responseCallback: MeteorClientMethodCallback?) {
+    func signup(withUserParameters params:EJSONObject, responseCallback: MeteorClientMethodCallback?)                   {
         
         guard authState != .AuthStateLoggingIn else {
             let errorDesc = "You must wait for the current signup request to finish before sending another."
@@ -48,64 +50,69 @@ extension MeteorClient { // Accounts
                                      code:MeteorClientError.LogonRejected.rawValue,
                                      userInfo: [NSLocalizedDescriptionKey: errorDesc])
             authDelegate?.authenticationFailed(withError: logonError)
-            responseCallback?(nil, logonError)
+            responseCallback?(.failure(logonError))
             return
         }
         setAuthStateToLoggingIn()
         
         call(method: "createUser", parameters: [params]) {
             
-            if let error = $1 {
+            switch $0 {
+            case .success(let response):
+                // tokenExpires.$date : expiry date
+                if let result = response["result"] as? EJSONObject {
+                    self.setAuthStateToLoggedIn(userId: result["id"] as! String, withToken: result["token"] as! String)
+                    self.authDelegate?.authenticationWasSuccessful()
+                }
+
+            case .failure(let error):
                 self.setAuthStatetoLoggedOut()
                 self.authDelegate?.authenticationFailed(withError: error)
-            } else if let result = $0?["result"] as? EJSONObject {
-                self.setAuthStateToLoggedIn(userId: result["id"] as! String, withToken: result["token"]  as! String)
-                self.authDelegate?.authenticationWasSuccessful()
             }
-            responseCallback?($0, $1)
+            responseCallback?($0)
         }
     }
-    func setAuthStateToLoggingIn() {
+    func setAuthStateToLoggingIn()                                                                                      {
         authState = .AuthStateLoggingIn
     }
-    func setAuthStateToLoggedIn(userId id: String, withToken: String) {
+    func setAuthStateToLoggedIn(userId id: String, withToken: String)                                                   {
         authState = .AuthStateLoggedIn
         userId = id
         sessionToken = withToken
         NotificationCenter.default.post(name: Notification.MeteorClientUpdateSession, object:self)
         connectionDelegate?.meteorClientUpdateSession(userId: id, sessionToken: withToken)
     }
-    func setAuthStatetoLoggedOut() {
+    func setAuthStatetoLoggedOut()                                                                                      {
         authState = .AuthStateLoggedOut
         userId = nil
     }
     
-    func buildUserParametersSignup(username:String, email: String, password: String, fullname: String) -> EJSONObject {
+    func buildUserParametersSignup(username:String, email: String, password: String, fullname: String) -> EJSONObject   {
         return ["username": username, "email": email,
                 "password": [ "digest": password.SHA256(), "algorithm": "sha-256" ],
                 "profile": ["fullname": fullname, "signupToken": ""]]
     }
     func buildUserParametersSignup(username:String, email:String, password:String,
-                                   firstName: String, lastName:String) -> EJSONObject {
+                                   firstName: String, lastName:String) -> EJSONObject                                   {
         
         return ["username": username, "email": email,
                 "password": [ "digest": password.SHA256(), "algorithm": "sha-256" ],
                 "profile": ["first_name": firstName, "last_name": lastName,"signupToken": ""]]
     }
-    func buildUserParameters(withUsername: String, password: String) -> EJSONObject   {
+    func buildUserParameters(withUsername: String, password: String) -> EJSONObject                                     {
         return ["user": ["username": withUsername], "password": ["digest": password.SHA256(), "algorithm": "sha-256" ]]
     }
-    func buildUserParameters(withEmail: String, password: String) -> EJSONObject    {
+    func buildUserParameters(withEmail: String, password: String) -> EJSONObject                                        {
         return ["user": ["email": withEmail], "password": ["digest": password.SHA256(), "algorithm": "sha-256" ]]
     }
-    func buildUserParameters(withUsernameOrEmail: String, password: String) -> EJSONObject   {
+    func buildUserParameters(withUsernameOrEmail: String, password: String) -> EJSONObject                              {
         if withUsernameOrEmail.contains("@") {
             return buildUserParameters(withEmail:withUsernameOrEmail, password:password)
         } else {
             return buildUserParameters(withUsername:withUsernameOrEmail, password:password)
         }
     }
-    func buildOAuthRequestString(with accessToken:String, serviceName: String) -> String    {
+    func buildOAuthRequestString(with accessToken:String, serviceName: String) -> String                                {
         
         if var homeUrl = ddp?.url {
             homeUrl = homeUrl.replacingOccurrences(of: "/websocket", with: "")
@@ -131,14 +138,14 @@ extension MeteorClient { // Accounts
         return ""
     }
     
-    func buildUserParameters(withOAuthAccessToken: String) -> EJSONObject {
+    func buildUserParameters(withOAuthAccessToken: String) -> EJSONObject                                               {
         return EJSONObject()
     }
     
     // functions for OAuth
     
     // generates base64 string for json
-    func generateState(withToken: String) -> String {
+    func generateState(withToken: String) -> String                                                                     {
         if let jsonData = try? JSONSerialization.data(withJSONObject: ["credentialToken": withToken, "loginStyle": "popup"], options: []) {
             
             return jsonData.base64EncodedString(options: .endLineWithLineFeed)
@@ -146,7 +153,7 @@ extension MeteorClient { // Accounts
         return ""
     }
     // generates random secret for credential token
-    func randomSecret() -> String {
+    func randomSecret() -> String                                                                                       {
         let BASE64_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" as NSString
         let s = NSMutableString(capacity:20)
         for _ in 0..<20 {
@@ -156,7 +163,7 @@ extension MeteorClient { // Accounts
         }
         return s as String
     }
-    func makeHTTPRequest(at url: String, completion: @escaping (String?) -> Void ) {
+    func makeHTTPRequest(at url: String, completion: @escaping (String?) -> Void )                                      {
         guard let url = URL(string: url) else {
             completion(nil)
             return
@@ -185,7 +192,7 @@ extension MeteorClient { // Accounts
             }
         }).resume()
     }
-    func handleOAuthCallback(callback:String?) -> EJSONObject? {
+    func handleOAuthCallback(callback:String?) -> EJSONObject?                                                          {
         // it's possible callback is nil
         
         guard var callback = callback                               else { return nil }

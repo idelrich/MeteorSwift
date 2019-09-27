@@ -297,8 +297,8 @@ public protocol DDPAuthDelegate: class {
 public typealias EJSONObject                = [String: Any]
 public typealias EJSONObjArray              = [EJSONObject]
 
-public typealias MeteorClientMethodCallback = (DDPMessage?, Error?) -> ()
-public typealias SubscriptionCallback       = (Notification.Name, String) -> Void
+public typealias MeteorClientMethodCallback = (Result<DDPMessage, Error>) -> ()
+public typealias SubscriptionCallback       = (String) -> Void
 
 public protocol CollectionDecoder {
     static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
