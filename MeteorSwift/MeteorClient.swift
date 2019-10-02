@@ -277,6 +277,7 @@ public class MeteorClient: NSObject {
             return nil
         }
         if let methodId = send(parameters:parameters, methodName:methodName) {
+            _methodIds.insert(methodId)
             if let callback = responseCallback {
                 _responseCallbacks[methodId] = callback
             }
