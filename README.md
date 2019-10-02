@@ -53,10 +53,18 @@ messages. You should register with NotificationCenter before calling connect in 
 Once connected, you can manage subscriptions with:
 
 ```swift    
-let subId = myClient.add(subscription: "name_of_subscription", withParams: [Any])
+let subId = myClient.add(subscription: String, withParams: [Any]?, onReady: SubscriptionCallback? = nil)
 ```
 
-to stop a subscription (unsubscribe) call
+When the subscription is ready, the optional onReady callback is called with the subscriptionId and subscription name as parameters. You can subscribe to a group of subscriptions "all at once" by passing an array of subscriptions with:
+
+```swift    
+let subId = myClient.add(subscriptions: [(name: String, params: [Any]?)], onReady: SubscriptionCallback? = nil)
+```
+
+In this case the optional onReady callback is called only once all of the referenced subscripts report ready, and the subscription name will be "GroupedSubscriptions".
+
+To stop a subscription, or group of subscriptions (i.e. to unsubscribe) call
 
 ```swift    
 myClient.remove(subscriptionId: subId)
@@ -129,7 +137,7 @@ struct Message : Codable, CollectionDecoder {
 
 *Note: the above example included a date field, and takes advantage of the MeteorSwift Codable EJSONDate type [(described below)](#ejsondate).*
 
-conforming to CollectionDecoder for Codable objects is automatically handled by a protocol extension:
+Conforming to CollectionDecoder for Codable objects is automatically handled by a protocol extension:
 
 ```swift    
 public extension CollectionDecoder where Self : Codable {
@@ -160,26 +168,24 @@ You inform the MeteorClient that a particular collection supports encoding and d
 
 However, this is done automatically when you create a [MongoCollection object (see below)](#collection-decoder). Once registered in this manner, MeteorClient will automatically decode any objects sent from the server into the registered type and store them that way. If you do not register a converter, then the objects will be stored as EJSON. 
 
-## Change Notification
+If your collection conforms to the OfflineObject protocol as follows:
 
-It is possible to register for change notifications on a specific collection, MeteorSwift create notification names that include the action (added, removed, etc) and will post a notification through notification center whenever these actions occur. You can listen for any or all of the following.
+```swift
+protocol OfflineObject where Self : Codable                      {
+    var _lastUpdated_       : EJSONDate?                                { get set }
+    var _wasOffline_        : Bool?                                     { get set }
+    var _id                 : String                                    { get set }
+}
+```
+Then the collection gains the three methods:
 
-To listen for a specific action (added, removed etc) on a specific collection, register for a notification on `collectionName_action`, to be notified of any change to a specific collection, register for a notification on `collectionName`, and to be notified of a specific action (for example all "added" events on any collection), register for a notification of `action`.
+```swift
+func persist(_ fileManager: FileManager = .default) throws
+func restore(_ fileManager: FileManager = .default)
+func clearOffline(_ fileManager: FileManager = .default)
+```
 
-Note, this can cause a lot of notifications, so use this with care. A better approach is to register a watcher (via [MongoCollection](#watching-collections)) which will greatly reduce the the notifications that are being sent.
-
-
-## EJSON
-
-MeteorSwift provides EJSON extension structs that comply to Codable for both EJSON dates and EJSON Data. These allow you to easily encode and decode Mongo objects that include these two types.
-
-### EJSONDate
-
-Includes functions to retrieve the date and ms value of the EJSON encoded date as well as an initializer that takes a Swift Date() value. 
-
-### EJSONData
-
-Includes functions to retrieve the encoded data as a Swift Data() value. 
+These functions allow you to save the objects in a collection to an offline file and restore them when required. The first time an object is persisted, it's _lastUpdated_ field is set to the current Date() and the _wasOffline_ field is set to true. The clearOffline function can be used to remove any objects in a collection for which _wasOffline_ is set to true. It is up to the client to decide when to persist / restore / and clear offline objects. It is important to note that objects that were marked as _wasOffline_ are preserved through a Meteor disconnect / reconnect cycle. 
 
 ## MongoCollection
 
@@ -250,6 +256,18 @@ let watchId = messages.watch(matching: nil, callback: (reason, _id, message) in 
 ```    
 As with findOne, the watch function also has a convenience version that takes a Mongo id string and a callback and sets up a watch for that the object in the collection with a matching _id. This requires that objects in the collection are EJSON or adopt the MongoObject protocol.
 
+## EJSON
+
+MeteorSwift provides EJSON extension structs that comply to Codable for both EJSON dates and EJSON Data. These allow you to easily encode and decode Mongo objects that include these two types.
+
+### EJSONDate
+
+Includes functions to retrieve the date and ms value of the EJSON encoded date as well as an initializer that takes a Swift Date() value. 
+
+### EJSONData
+
+Includes functions to retrieve the encoded data as a Swift Data() value. 
+
 ## MeteorClient Types & Protocols
 
 MeteorSwift defines a number of helper types and protocols that are summarized below:
@@ -298,7 +316,7 @@ public typealias EJSONObject                = [String: Any]
 public typealias EJSONObjArray              = [EJSONObject]
 
 public typealias MeteorClientMethodCallback = (Result<DDPMessage, Error>) -> ()
-public typealias SubscriptionCallback       = (String) -> Void
+public typealias SubscriptionCallback       = (String, String) -> Void
 
 public protocol CollectionDecoder {
     static func decode(data: Data, decoder: JSONDecoder) throws ->  Any?
@@ -321,13 +339,3 @@ public enum ChangedReason: String {
     case changed
 }
 ```
-
-
-
-
-
-
-
-
-
-

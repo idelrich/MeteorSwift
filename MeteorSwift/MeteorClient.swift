@@ -292,7 +292,7 @@ public class MeteorClient: NSObject {
     ///   - callback: (Optional) callback to be called once the subscription is ready.
     /// - Returns: A subscriptionId which must be used to stop/remove the subscription
     public func add(subscription name: String, withParameters: [Any]? = nil,
-                    callback: SubscriptionCallback? = nil) -> String?                                                   {
+                    onReady: SubscriptionCallback? = nil) -> String?                                                   {
         let uid = DDPIdGenerator.nextId
         subscriptions[uid] = name
         if let parameters = withParameters {
@@ -303,7 +303,7 @@ public class MeteorClient: NSObject {
         _readySubscriptions[uid] = false
         ddp?.subscribe(withId: uid, name: name, parameters: withParameters)
         
-        if let callback = callback {
+        if let callback = onReady {
             _subscriptionCallback[uid] = callback
         }
         return uid
@@ -315,11 +315,11 @@ public class MeteorClient: NSObject {
     ///   - callback: (Optional) callback to be called once ALL of the subscriptions are ready.
     /// - Returns: A subscriptionId which must be used to stop/remove the grouped subscriptions
     public func add(subscriptions: [(name: String, params: [Any]?)],
-                    callback: SubscriptionCallback? = nil) -> String?                                                   {
+                    onReady: SubscriptionCallback? = nil) -> String?                                                   {
         
         let uid = DDPIdGenerator.nextId     // This is an id for the subscription group.
         
-        let testSubs : SubscriptionCallback = { (subId) in
+        let testSubs : SubscriptionCallback = { (subId, _) in
             //
             // Check if ALL subscriptions in this group are marked ready
             guard let subIds = self.subscriptionGroups[uid] else { return }
@@ -331,14 +331,14 @@ public class MeteorClient: NSObject {
             //
             // To get this far, all subIds in the group have been marked ready.
             // Invoke the top level callback.
-            callback?(uid)
+            onReady?(uid, "GroupedSubscriptions")
         }
         //
         // Create an array of subscriptions, each using our "group" testSubs callback
         // to see if all of the subscriptions are ready.
         var subs = [String]()
         for sub in subscriptions {
-            if let subId = add(subscription: sub.name, withParameters: sub.params, callback: testSubs) {
+            if let subId = add(subscription: sub.name, withParameters: sub.params, onReady: testSubs) {
                 subs.append(subId)
             }
         }
