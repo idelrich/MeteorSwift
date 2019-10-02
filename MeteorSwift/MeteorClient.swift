@@ -61,7 +61,7 @@ public typealias EJSONObjArray              = [EJSONObject]
 /// Response callback for any invocation of a Meteor method
 public typealias MeteorClientMethodCallback = (Result<DDPMessage, Error>) -> ()
 /// Subscription callback, called when a subscription is ready
-public typealias SubscriptionCallback       = (String) -> Void
+public typealias SubscriptionCallback       = (String, String) -> Void
 
 /// Convenience type, a Meteor Collection is an ordered
 /// dictionary of ids / data pairs.
@@ -165,7 +165,7 @@ public class MeteorClient: NSObject {
         for (name, collection) in collections {
             temp.removeAll()
             for (key, object) in collection {
-                if let entry = object as? OfflineObject {
+                if let entry = object as? OfflineObject, entry._wasOffline_ == true {
                     temp.add(entry, for: key)
                 }
             }

@@ -44,7 +44,7 @@ extension MeteorClient : SwiftDDPDelegate {
                 for readySubscriptionId in subs {
                     if let name = subscriptions[readySubscriptionId] {
                         _readySubscriptions[readySubscriptionId] = true
-                        _subscriptionCallback[readySubscriptionId]?(name)
+                        _subscriptionCallback[readySubscriptionId]?(readySubscriptionId, name)
                     }
                 }
             }
