@@ -32,7 +32,7 @@ extension MeteorClient : SwiftDDPDelegate {
             
         case "connected":
             connected = true
-            if let sessionToken = sessionToken { //TODO check expiry date
+            if let sessionToken = sessionToken {
                 logon(with: sessionToken, responseCallback: nil)
             }
             connectionDelegate?.meteorClientReady()
@@ -50,7 +50,6 @@ extension MeteorClient : SwiftDDPDelegate {
             }
             
         case "updated":
-            // TODO: Understand what this means...
             if let methods = message["methods"] as? [String] {
                 for updateMethod in methods {
                     for methodId in _methodIds  where methodId == updateMethod {

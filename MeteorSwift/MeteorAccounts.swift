@@ -23,7 +23,6 @@ extension MeteorClient { // Accounts
         guard !rejectIfNotConnected(responseCallback: responseCallback) else {
             return
         }
-        
         setAuthStateToLoggingIn()
         
         call(method: "login", parameters: [withUserParameters]) {

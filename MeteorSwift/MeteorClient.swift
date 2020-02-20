@@ -6,7 +6,7 @@
 //  Copyright © 2018 Stephen Orr. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public extension Notification {
     static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
@@ -133,11 +133,14 @@ public class MeteorClient: NSObject {
     /// Connect to the Meteor client
     public func connect()                                                                                               {
         ddp?.connectWebSocket()
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterForeground),
+                                               name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     /// Disconnect from the Meteor client
     public func disconnect()                                                                                            {
         _disconnecting = true
         ddp?.disconnectWebSocket()
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     /// Registers a Type for a Collection, that type must conform to CollectionDecoder
     /// (which in turn implies conformance with Codable). If provided, the associated
@@ -273,7 +276,7 @@ public class MeteorClient: NSObject {
     @discardableResult
     public func call(method methodName: String, parameters: [Any],
                      responseCallback: MeteorClientMethodCallback? = nil) -> String?                                    {
-        if rejectIfNotConnected(responseCallback: responseCallback) {
+        guard !rejectIfNotConnected(responseCallback: responseCallback) else {
             return nil
         }
         if let methodId = send(parameters:parameters, methodName:methodName) {
@@ -604,4 +607,8 @@ public class MeteorClient: NSObject {
         return false
     }
     
+    @objc func didEnterForeground() {
+        _tries = 1
+        self.reconnect();
+    }
 }

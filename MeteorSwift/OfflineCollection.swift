@@ -14,16 +14,34 @@ public protocol OfflineObject where Self : Codable                      {
     var _id                 : String                                    { get set }
 }
 
-extension MongoCollection where T : OfflineObject                       {
+public extension MongoCollection where T : OfflineObject                {
+    func setPersistWatcher()                                            {
+        //
+        // Restore the cached data for this collection.
+        self.restore()
+        print("\(self.name) has \(self.count) objects.")
+        //
+        // Watch for changes coming from the server.
+        var timer : Timer? = nil
+        watch { (_,_,_) in
+            //
+            // If there is a currently active timer, invalidate it, then set a new timer
+            // to persist the collection in 5 seconds.
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { (_) in
+                timer = nil
+                DispatchQueue.init(label: "Persisting").async {
+                    try? self.persist()
+                }
+            }
+        }
+    }
     public func persist(_ fileManager: FileManager = .default) throws   {
 
-        guard let collection = meteor.collections[name]                         else {
-            throw NSError(domain: "Encoder", code: -1,
-                          userInfo: ["reason": "Missing collection"])
-        }
+        guard let collection = meteor.collections[name]         else { return }
 
         let folderURLs = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
-        let fileURL = folderURLs[0].appendingPathComponent(self.name + ".cache")
+        let fileURL = folderURLs[0].appendingPathComponent(name + ".cache")
         let now = EJSONDate(date: Date())
         let encoder = JSONEncoder()
         //
@@ -37,7 +55,9 @@ extension MongoCollection where T : OfflineObject                       {
                 entry._lastUpdated_ = now
             }
             return entry
+            
         })).write(to: fileURL)
+        print("Persisted collection \(name) with \(collection.count) objects.")
     }
     public func restore(_ fileManager: FileManager = .default)          {
         //
@@ -53,7 +73,6 @@ extension MongoCollection where T : OfflineObject                       {
         if meteor.collections[name] == nil {
             meteor.collections[name] = MeteorCollection()
         }
-        
         entries.forEach {
             var entry = $0
             entry._wasOffline_ = true

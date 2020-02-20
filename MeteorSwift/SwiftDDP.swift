@@ -68,10 +68,10 @@ class SwiftDDP: NSObject {
         //  session: string (if trying to connectWebSocket to an existing DDP session)
         //  version: string (the proposed protocol version)
         //  support: array of strings (protocol versions supported by the client, in order of preference)
-
-        // TODO: Why os the Session string passed in and ignored...?
-        
-        let fields = ["msg": "connect", "version": version, "support": support] as EJSONObject
+        var fields = ["msg": "connect", "version": version, "support": support] as EJSONObject
+        if let session = withSession, session.isEmpty == false {
+            fields["session"] = session
+        }
         let json = buildJSON(withFields:fields, parameters:nil)
         webSocket?.send(json)
     }
@@ -111,7 +111,7 @@ class SwiftDDP: NSObject {
         // and pass through the rest.
 
         //
-        // TODO: Add support for nested arrays...
+        // FUTURE: Add support for nested arrays... ???
         do {
             if let date = object as? Date {
                 return date.bson

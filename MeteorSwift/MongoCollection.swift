@@ -207,10 +207,9 @@ public struct MongoCollection<T> {
     public func stopAllWatches()                                                                                    {
         watcher.removeAll()
     }
-
 }
 
-class MeteorWatcher<T>: NSObject                                                                                    {
+fileprivate class MeteorWatcher<T>: NSObject                                                                        {
     private var watchList   = [String: (MeteorMatcher<T>?, CollectionCallback<T>)]()
     private var idWatchList = [String: (String, CollectionCallback<T>)]()
 
@@ -265,5 +264,3 @@ extension MeteorWatcher : ObjectChangeLister {
         }
     }
 }
-
-

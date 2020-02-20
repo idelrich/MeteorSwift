@@ -246,8 +246,7 @@ extension MeteorClient { // Parsing
         return (_id, result)
     }
     private func sendNotification(for reason: ChangedReason, collection: String, id: String, value: Any?)   {
-        //
-        // TODO: Deprecate these.
+
         var userInfo:[String: Any] = ["msg": reason.rawValue, "_id": id]
         if let value = value {
             userInfo["result"] = value
