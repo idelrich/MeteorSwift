@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 /// A closure that takes the expected type and returns Bool if the record should be included.
 public typealias MeteorMatcher<T>       = (T) -> Bool
 /// A closure that takes the expected type and returns the descired sort order.
@@ -33,10 +34,6 @@ public enum ChangedReason: String {
 
 protocol ObjectChangeLister {
     func onChange(_ _id:String, reason: ChangedReason, object: Any?)
-}
-
-public protocol MongoObject {
-    var _id: String { get set }
 }
 
 /// MongoCollection
@@ -169,7 +166,7 @@ public struct MongoCollection<T> {
     ///      item: The object to extract the MongoId from
     private func mongoId(for item: T) -> String?                                                                    {
         var _id: String?
-        if let obj = item as? MongoObject {
+        if let obj = item as? any MongoObject {
             _id = obj._id
         } else if let obj = item as? EJSONObject {
             _id = obj["_id"] as? String

@@ -12,7 +12,7 @@ public extension Notification {
     static let MeteorClientConnectionReady  = Notification.Name("sorr.swiftddp.ready")
     static let MeteorClientDidConnect       = Notification.Name("sorr.swiftddp.connected")
     static let MeteorClientDidDisconnect    = Notification.Name("sorr.swiftddp.disconnected")
-    static let MeteorClientUpdateSession    = Notification.Name("sorr.swiftddp.disconnected")
+    static let MeteorClientUpdateSession    = Notification.Name("sorr.swiftddp.update")
 }
 
 public protocol MeteorConnectionDelegate {
@@ -48,7 +48,7 @@ public enum AuthState:UInt {
 }
 
 /// Delegate for OAuth style login (experimental)
-public protocol DDPAuthDelegate: class {
+public protocol DDPAuthDelegate: AnyObject {
     func authenticationWasSuccessful()
     func authenticationFailed(withError: Error)
 }
@@ -140,6 +140,7 @@ public class MeteorClient: NSObject {
     public func disconnect()                                                                                            {
         _disconnecting = true
         ddp?.disconnectWebSocket()
+        connected = false
         NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     /// Registers a Type for a Collection, that type must conform to CollectionDecoder

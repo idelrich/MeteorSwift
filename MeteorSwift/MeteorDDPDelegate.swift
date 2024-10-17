@@ -33,11 +33,16 @@ extension MeteorClient : SwiftDDPDelegate {
         case "connected":
             connected = true
             if let sessionToken = sessionToken {
-                logon(with: sessionToken, responseCallback: nil)
+                logon(with: sessionToken) { (_) in
+                    self.connectionDelegate?.meteorClientReady()
+                    NotificationCenter.default.post(name: Notification.MeteorClientConnectionReady, object:self)
+                    self.makeMeteorDataSubscriptions()
+                }
+            } else {
+                connectionDelegate?.meteorClientReady()
+                NotificationCenter.default.post(name: Notification.MeteorClientConnectionReady, object:self)
+                makeMeteorDataSubscriptions()
             }
-            connectionDelegate?.meteorClientReady()
-            NotificationCenter.default.post(name: Notification.MeteorClientConnectionReady, object:self)
-            makeMeteorDataSubscriptions()
         
         case "ready":
             if let subs = message["subs"] as? [String] {

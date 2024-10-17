@@ -2,10 +2,10 @@
 
 MeteorSwift is a swift (and swifty) re-implementaion of [Objective-DDP](https://github.com/boundsj/ObjectiveDDP), that also takes advantage of Swift closures, codable types and some other Swift magic.
 
-This document current to version tag 0.0.9
+This document current to version tag 1.0.0
 
 ## Installation 
-Install via CocoaPods: (not yet supported)
+Install via CocoaPods
 
 ```ruby    
 pod 'MeteorSwift'

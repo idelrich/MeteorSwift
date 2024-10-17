@@ -51,7 +51,7 @@ class SwiftDDP: NSObject {
             fields[id] = id
         }
         let json = buildJSON(withFields:fields, parameters:nil)
-        webSocket?.send(json)
+        try? webSocket?.send(string: json)
     }
     func pong(id: String?)                                                                                  {
         // pong (client -> server):
@@ -61,7 +61,7 @@ class SwiftDDP: NSObject {
             fields[id] = id
         }
         let json = buildJSON(withFields:fields, parameters:nil)
-        webSocket?.send(json)
+        try? webSocket?.send(string: json)
     }
     func connect(withSession: String?, version: String, support: [String])                                  {
         // connect (client -> server)
@@ -73,7 +73,7 @@ class SwiftDDP: NSObject {
             fields["session"] = session
         }
         let json = buildJSON(withFields:fields, parameters:nil)
-        webSocket?.send(json)
+        try? webSocket?.send(string: json)
     }
     func subscribe(withId id: String, name: String, parameters: [Any]?)                                     {
         //sub (client -> server):
@@ -82,14 +82,14 @@ class SwiftDDP: NSObject {
         //  params: optional array of EJSON items (parameters to the subscription)
         let fields = ["msg": "sub", "name": name, "id": id]
         let json = buildJSON(withFields:fields, parameters:parameters)
-        webSocket?.send(json)
+        try? webSocket?.send(string: json)
     }
     func unsubscribe(withId id: String)                                                                     {
         //unsub (client -> server):
         //  id: string (an arbitrary client-determined identifier for this subscription)
         let fields = ["msg": "unsub", "id": id]
         let json = buildJSON(withFields: fields, parameters: nil)
-        webSocket?.send(json)
+        try? webSocket?.send(string: json)
     }
     func method(withId id: String, method: String, parameters: [Any]?)                                      {
         //method (client -> server):
@@ -98,7 +98,7 @@ class SwiftDDP: NSObject {
         //  id: string (an arbitrary client-determined identifier for this method call)
         let fields = ["msg": "method", "method": method, "id": id]
         let json = buildJSON(withFields: fields, parameters: parameters)
-        webSocket?.send(json)
+        try? webSocket?.send(string: json)
     }
 
     var url:String { get { return urlString } }
@@ -177,16 +177,16 @@ extension SwiftDDP { // MARK - Internal
 }
 
 extension SwiftDDP: SRWebSocketDelegate {
-    public func webSocketDidOpen(_ webSocket: SRWebSocket!)                                                        {
+    public func webSocketDidOpen(_ webSocket: SRWebSocket)                                                        {
         delegate?.didOpen()
     }
-    public func webSocket(_ webSocket: SRWebSocket!, didFailWithError error: Error!)                               {
+    public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error)                               {
         delegate?.didReceive(connectionError: error)
     }
-    public func webSocket(_ webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool)  {
+    public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool)  {
         delegate?.didReceiveConnectionClose()
     }
-    public func webSocket(_ webSocket: SRWebSocket!, didReceiveMessage message: Any!)                              {
+    public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any)                              {
         if let message = message as? String {
             if let data = message.data(using: .utf8) {
                 if let message = try? JSONSerialization.jsonObject(with: data, options: []) {

@@ -1,8 +1,14 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '9.0'
 
 target 'MeteorSwift' do
+  platform :ios, '13.0'
   use_frameworks!
   pod 'SocketRocket'
-  pod 'SCrypto'
 end
+
+target 'MeteorSwiftTV' do
+  platform :tvos, '10.0'
+  use_frameworks!
+  pod 'SocketRocket'
+end
+

@@ -19,24 +19,25 @@ public extension MongoCollection where T : OfflineObject                {
         //
         // Restore the cached data for this collection.
         self.restore()
-        print("\(self.name) has \(self.count) objects.")
+        //print("\(self.name) has \(self.count) objects.")
         //
         // Watch for changes coming from the server.
-        var timer : Timer? = nil
-        watch { (_,_,_) in
+        var timer = Timer()
+        _ = watch { (_,_,_) in
             //
             // If there is a currently active timer, invalidate it, then set a new timer
             // to persist the collection in 5 seconds.
-            timer?.invalidate()
+            if timer.isValid {
+                timer.invalidate()
+            }
             timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { (_) in
-                timer = nil
                 DispatchQueue.init(label: "Persisting").async {
                     try? self.persist()
                 }
             }
         }
     }
-    public func persist(_ fileManager: FileManager = .default) throws   {
+    func persist(_ fileManager: FileManager = .default) throws   {
 
         guard let collection = meteor.collections[name]         else { return }
 
@@ -57,9 +58,9 @@ public extension MongoCollection where T : OfflineObject                {
             return entry
             
         })).write(to: fileURL)
-        print("Persisted collection \(name) with \(collection.count) objects.")
+        //print("Persisted collection \(name) with \(collection.count) objects.")
     }
-    public func restore(_ fileManager: FileManager = .default)          {
+    func restore(_ fileManager: FileManager = .default)          {
         //
         // Read the data from storage (if present) and
         let folderURLs = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
@@ -79,7 +80,7 @@ public extension MongoCollection where T : OfflineObject                {
             meteor.collections[name]?.add([entry._id: entry])
         }
     }
-    public func clearOffline(_ fileManager: FileManager = .default)     {
+    func clearOffline(_ fileManager: FileManager = .default)     {
         guard let collection = meteor.collections[name]                         else { return }
         //
         // For each entry that "_wasOffline_" remove it from the collection.

@@ -9,11 +9,10 @@ Pod::Spec.new do |s|
   s.homepage     = "http://www.curlcoach.com"
   s.license      = "MIT"
   s.author       = { "Stephen Orr" => "stephen@chatorr.ca" }
-  s.platform     = :ios, "10.0"
+  s.platform     = :ios, "13.0"
   s.source       = { :git => "https://github.com/idelrich/MeteorSwift.git", :tag => "0.0.14" }
-  #s.source       = { :local => '/Users/stephen/Development/MeteorSwift/MeteorSwift' }
   s.source_files = "MeteorSwift/*.{swift,h}"
   s.dependency   "SocketRocket"
-  s.dependency   "SCrypto"
+  #s.dependency   "CommonCrypto"
 end
 

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SCrypto
 
 extension MeteorClient { // Accounts
     func logon(withUserParameters: EJSONObject, responseCallback: MeteorClientMethodCallback?)                          {
@@ -88,21 +87,21 @@ extension MeteorClient { // Accounts
     
     func buildUserParametersSignup(username:String, email: String, password: String, fullname: String) -> EJSONObject   {
         return ["username": username, "email": email,
-                "password": [ "digest": password.SHA256(), "algorithm": "sha-256" ],
+                "password": [ "digest": password.sha256(), "algorithm": "sha-256" ],
                 "profile": ["fullname": fullname, "signupToken": ""]]
     }
     func buildUserParametersSignup(username:String, email:String, password:String,
                                    firstName: String, lastName:String) -> EJSONObject                                   {
         
         return ["username": username, "email": email,
-                "password": [ "digest": password.SHA256(), "algorithm": "sha-256" ],
+                "password": [ "digest": password.sha256(), "algorithm": "sha-256" ],
                 "profile": ["first_name": firstName, "last_name": lastName,"signupToken": ""]]
     }
     func buildUserParameters(withUsername: String, password: String) -> EJSONObject                                     {
-        return ["user": ["username": withUsername], "password": ["digest": password.SHA256(), "algorithm": "sha-256" ]]
+        return ["user": ["username": withUsername], "password": ["digest": password.sha256(), "algorithm": "sha-256" ]]
     }
     func buildUserParameters(withEmail: String, password: String) -> EJSONObject                                        {
-        return ["user": ["email": withEmail], "password": ["digest": password.SHA256(), "algorithm": "sha-256" ]]
+        return ["user": ["email": withEmail], "password": ["digest": password.sha256(), "algorithm": "sha-256" ]]
     }
     func buildUserParameters(withUsernameOrEmail: String, password: String) -> EJSONObject                              {
         if withUsernameOrEmail.contains("@") {

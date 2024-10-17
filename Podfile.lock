@@ -1,20 +1,16 @@
 PODS:
-  - SCrypto (4.0.0)
-  - SocketRocket (0.5.1)
+  - SocketRocket (0.6.0)
 
 DEPENDENCIES:
-  - SCrypto
   - SocketRocket
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - SCrypto
+  trunk:
     - SocketRocket
 
 SPEC CHECKSUMS:
-  SCrypto: e7b6b4e68b6fa524dbc6e391e85982c30832f425
-  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
 
-PODFILE CHECKSUM: 1cb955f65116033ee9a5e0c4724457a2c66de4ef
+PODFILE CHECKSUM: 2424d8100ec58659f4fb2da2a250f1b1d7934330
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.15.2
